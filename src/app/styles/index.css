@@ -32,26 +32,32 @@
   --color-muted-weak: #eef1f4;
 
   /* radius */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 22px;
+  --radius-sm: 0.8rem;
+  --radius-md: 1.2rem;
+  --radius-lg: 1.6rem;
+  --radius-xl: 2.2rem;
   --radius-pill: 999px;
 
   /* shadow */
-  --shadow-sm: 0 1px 2px rgba(24, 31, 41, 0.04), 0 1px 3px rgba(24, 31, 41, 0.05);
-  --shadow-md: 0 4px 14px rgba(24, 31, 41, 0.06), 0 2px 6px rgba(24, 31, 41, 0.04);
-  --shadow-lg: 0 14px 40px rgba(24, 31, 41, 0.1), 0 4px 12px rgba(24, 31, 41, 0.06);
+  --shadow-sm: 0 0.1rem 0.2rem rgba(24, 31, 41, 0.04), 0 0.1rem 0.3rem rgba(24, 31, 41, 0.05);
+  --shadow-md: 0 0.4rem 1.4rem rgba(24, 31, 41, 0.06), 0 0.2rem 0.6rem rgba(24, 31, 41, 0.04);
+  --shadow-lg: 0 1.4rem 4rem rgba(24, 31, 41, 0.1), 0 0.4rem 1.2rem rgba(24, 31, 41, 0.06);
 
   /* font */
   --font-sans:
     'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', system-ui, sans-serif;
 }
 
+html {
+  font-size: 62.5%; /* 1rem = 10px */
+}
+
 body {
   background: var(--color-bg);
+
   color: var(--color-ink);
   font-family: var(--font-sans);
+  font-size: 1.6rem; /* 16px */
   letter-spacing: -0.01em;
 }
 
