@@ -1,4 +1,4 @@
-import { AppTitle } from "@shared/ui";
+import { AppTitle } from '@shared/ui';
 
 const App = () => {
   return <AppTitle />;
