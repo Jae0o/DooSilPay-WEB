@@ -19,6 +19,20 @@ paths:
 
 프론트엔드 프로젝트는 **FSD(Feature-Sliced Design)** 구조를 사용한다(`app > pages > widgets > features > entities > shared` 단방향). 레이어·슬라이스·세그먼트 배치, 전 레벨 배럴, 단방향 의존은 **`.claude/rules/folder_structure.md`** 를 따른다.
 
+## Barrel Import
+
+**모든 레벨에 `index.ts` 배럴**을 두고 외부는 배럴(공개 인터페이스) 경유로만 import한다. 딥 임포트 금지(같은 슬라이스 내부 상대경로만 예외). 상세는 `.claude/rules/folder_structure.md §3`.
+
+## 폴더 구조 (folder-per-unit)
+
+컴포넌트·훅·store·provider 등 **단위 1개 = 폴더 1개**로 둔다: `<Name>/<Name>.{tsx,ts}` 구현 + `<Name>/index.ts` 배럴(예: `AppTitle/`, `useToggle/`, `useUiStore/`, `QueryProvider/`). 세그먼트 배럴은 각 단위를 재노출한다. 상세는 `.claude/rules/folder_structure.md §3·§4`.
+
+**보조 유닛은 의미 폴더로 묶는다**: 세그먼트에 명확한 **메인 산출물**(예: `routing`의 `router`)이 있고 그와 **성격이 다른 보조 유닛**(예: 가드)이 함께 있으면, 보조 유닛은 역할 기반 **의미 폴더**로 묶어 메인과 구분한다(예: `routing/guards/ProtectedRoute/`, 배럴 `guards/index.ts`). 폴더명은 역할로 짓고(`guards/` 등) provider 등 부정확한 이름은 쓰지 않는다 — 가드는 상태를 공급하지 않으므로 provider가 아니다.
+
+## export 규칙
+
+**내보낼 대상이 1개거나 명확한 default가 존재하면 반드시 `export default`** 로 내보내고, 배럴에서 `export { default as Name }`(또는 `export *`)로 재노출한다. export가 여러 개(서로 대등)면 named export를 쓴다.
+
 ## Alias 강제
 
 alias가 정의된 경로는 **반드시 alias로 import**한다(상대경로 `../../` 로 슬라이스 경계를 넘지 않음). 현재 레이어 alias는 `@`-프리픽스(`@shared/ui`, `@entities/student` …)이며 딥 임포트는 금지(규약 §5). 세그먼트 내부 같은 슬라이스 파일끼리의 상대경로 참조만 예외.
