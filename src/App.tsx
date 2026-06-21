@@ -1,5 +1,7 @@
+import { AppTitle } from "@shared/ui";
+
 const App = () => {
-  return <h1>DooSilPay</h1>;
+  return <AppTitle />;
 };
 
 export default App;
