@@ -41,6 +41,10 @@ alias가 정의된 경로는 **반드시 alias로 import**한다(상대경로 `.
 
 폼·입력 상태는 `react-hook-form` 으로 관리한다. 수동 `useState` 관리는 지양한다.
 
+## 단위 (rem)
+
+`html { font-size: 62.5% }` → **1rem = 10px**(px÷10=rem). Tailwind 기본 스케일(`p-4`·`gap-2.5`·`text-sm`)은 62.5%에서 축소되므로 쓰지 말고 **수치를 rem으로 직접 명시**한다(`text-[1.4rem]`·`gap-[1rem]`·`w-[2rem]`). 색/라운드/섀도 시맨틱 토큰(`bg-point`·`rounded-md`)은 예외로 허용. 상세는 `.claude/rules/unit_convention.md`.
+
 ## Prettier / Lint 준수
 
 모든 변경은 프로젝트의 `prettier`·`eslint` 설정을 통과해야 한다. 작업 완료 전 포맷·린트를 적용해 위반이 없는 상태로 남긴다.

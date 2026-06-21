@@ -3,7 +3,7 @@
 프론트엔드 폴더 구조·import·배럴·커스텀 훅 규약의 **확정 기준**. 코드 생성·이동·리팩터링 시 **항상** 따른다.
 
 > 판정 절차(레이어 선택 플로우·widget↔feature·인터페이스/의존성)는 **`fsd-architecture-skill`** 을 따른다. 이 문서는 그 위에 **프로젝트 확정 사항**(전 레벨 배럴·커스텀 훅 폴더 패턴·레이어 alias)을 못 박는다.
-> 훅 **분리 기준·폼 관리·오버엔지니어링 금지**는 `.claude/rules/agents_rules.md`(폴더·네이밍·배럴은 본 문서가 우선). 상위 설계: `.claude/docs/기획/기반-아키텍처.md §3`.
+> 훅 **분리 기준·폼 관리·오버엔지니어링 금지**는 `.claude/rules/agents_rules.md`(폴더·네이밍·배럴은 본 문서가 우선). **치수 단위(rem·62.5%)** 는 `.claude/rules/unit_convention.md`. 상위 설계: `.claude/docs/기획/기반-아키텍처.md §3`.
 
 ---
 
