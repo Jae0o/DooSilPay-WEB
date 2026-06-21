@@ -57,16 +57,16 @@
 
 ```ts
 // ✅ 인터페이스 경유
-import { useStudent } from 'entities/student';
-import { Button } from 'shared/ui';
+import { useStudent } from '@entities/student';
+import { Button } from '@shared/ui';
 // ❌ 딥 임포트
-import { useStudent } from 'entities/student/hooks/useStudent';
-import { Button } from 'shared/ui/Button/Button';
+import { useStudent } from '@entities/student/hooks/useStudent';
+import { Button } from '@shared/ui/Button/Button';
 ```
 
 - 세그먼트 내부(같은 슬라이스) 파일끼리는 상대경로 직접 참조 허용. 인터페이스 규율은 **슬라이스 경계**에만 적용.
-- **수평 참조(같은 레이어)**: 원칙 금지. 단 엔티티가 다른 엔티티 모델을 정당히 참조할 때만, 대상 슬라이스 **root `index.ts`** 로 노출하고 `'<layer>/<slice>'`(세그먼트 없는 경로)로만 import.
-  - 예: `entities/payment` 가 `student` 참조 → `import { Student } from 'entities/student'`.
+- **수평 참조(같은 레이어)**: 원칙 금지. 단 엔티티가 다른 엔티티 모델을 정당히 참조할 때만, 대상 슬라이스 **root `index.ts`** 로 노출하고 `'@<layer>/<slice>'`(세그먼트 없는 경로)로만 import.
+  - 예: `entities/payment` 가 `student` 참조 → `import { Student } from '@entities/student'`.
 - 배럴은 **선택 노출**: 내부 전용 헬퍼/매퍼/API 콜러는 export하지 않는다.
 
 ---
@@ -116,18 +116,17 @@ import { Button } from 'shared/ui/Button/Button';
 
 레이어별 path alias를 **TS와 Vite 양쪽**에서 동일 해석한다.
 
-`tsconfig`(앱 설정):
+`tsconfig`(앱 설정). TS 6에서 `baseUrl`은 deprecated이므로 두지 않고, `paths` 타깃을 `./` 상대경로로 둔다(키는 `@`-프리픽스):
 ```jsonc
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
-      "app/*":      ["src/app/*"],
-      "pages/*":    ["src/pages/*"],
-      "widgets/*":  ["src/widgets/*"],
-      "features/*": ["src/features/*"],
-      "entities/*": ["src/entities/*"],
-      "shared/*":   ["src/shared/*"]
+      "@app/*":      ["./src/app/*"],
+      "@pages/*":    ["./src/pages/*"],
+      "@widgets/*":  ["./src/widgets/*"],
+      "@features/*": ["./src/features/*"],
+      "@entities/*": ["./src/entities/*"],
+      "@shared/*":   ["./src/shared/*"]
     }
   }
 }
@@ -135,7 +134,7 @@ import { Button } from 'shared/ui/Button/Button';
 
 `vite.config.ts` / `vitest.config.ts`: `vite-tsconfig-paths` 플러그인으로 위 paths를 재사용(별도 alias 중복 정의 금지 — 단일 출처).
 
-import 형태는 FSD 스킬 예시와 동일: `import { Button } from 'shared/ui'`, `import { useStudent } from 'entities/student'`. `@`-프리픽스 미사용. 수평 참조는 항상 `'<layer>/<slice>'`.
+import 형태는 FSD 스킬 예시와 동일하되 **`@`-프리픽스 사용**: `import { Button } from '@shared/ui'`, `import { useStudent } from '@entities/student'`. 수평 참조는 항상 `'@<layer>/<slice>'`.
 
 ---
 

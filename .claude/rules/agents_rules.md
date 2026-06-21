@@ -15,6 +15,14 @@ paths:
 
 요청한 것만 구현한다. 미사용 props·추상화·speculative 한 유연성을 추가하지 않는다. 더 단순한 방법이 있으면 그쪽을 택한다.
 
+## FE 아키텍처 (FSD)
+
+프론트엔드 프로젝트는 **FSD(Feature-Sliced Design)** 구조를 사용한다(`app > pages > widgets > features > entities > shared` 단방향). 레이어·슬라이스·세그먼트 배치, 전 레벨 배럴, 단방향 의존은 **`.claude/rules/folder_structure.md`** 를 따른다.
+
+## Alias 강제
+
+alias가 정의된 경로는 **반드시 alias로 import**한다(상대경로 `../../` 로 슬라이스 경계를 넘지 않음). 현재 레이어 alias는 `@`-프리픽스(`@shared/ui`, `@entities/student` …)이며 딥 임포트는 금지(규약 §5). 세그먼트 내부 같은 슬라이스 파일끼리의 상대경로 참조만 예외.
+
 ## Form / Input 관리
 
 폼·입력 상태는 `react-hook-form` 으로 관리한다. 수동 `useState` 관리는 지양한다.
