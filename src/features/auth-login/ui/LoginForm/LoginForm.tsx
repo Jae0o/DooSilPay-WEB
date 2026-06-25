@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 
 import { Button, FormField, LockIcon, MailIcon, TextInput } from '@shared/ui';
 
+import { useLogin } from '../../hooks';
 import type { LoginCredentials } from '../../model';
 
 const LoginForm = () => {
@@ -14,13 +15,9 @@ const LoginForm = () => {
     defaultValues: { email: '', password: '', remember: true },
   });
 
-  // TODO(01-06): const { mutate: login, isPending } = useLogin();
-  const isPending = false;
+  const { mutate: login, isPending } = useLogin();
 
-  const onSubmit = (values: LoginCredentials) => {
-    // TODO(01-06): login(values);
-    void values;
-  };
+  const onSubmit = (values: LoginCredentials) => login(values);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-[1.6rem]">

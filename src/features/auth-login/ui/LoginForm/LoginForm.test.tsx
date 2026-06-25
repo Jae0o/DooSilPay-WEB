@@ -3,6 +3,10 @@ import userEvent from '@testing-library/user-event';
 
 import LoginForm from './LoginForm';
 
+vi.mock('../../hooks', () => ({
+  useLogin: () => ({ mutate: vi.fn(), isPending: false }),
+}));
+
 describe('LoginForm', () => {
   it('이메일·비밀번호 필드와 로그인 버튼, 기본 체크된 상태 유지 체크박스를 렌더한다', () => {
     render(<LoginForm />);
