@@ -1,0 +1,1 @@
+export { PasswordSetupForm } from './PasswordSetupForm';
