@@ -1,1 +1,1 @@
-export type { AcademyProfile } from './academy.type';
+export type { AcademyProfile, UpsertAcademyInput } from './academy.type';

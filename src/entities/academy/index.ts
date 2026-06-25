@@ -1,2 +1,2 @@
 export { getAcademy, useGetAcademyQuery, ACADEMY_KEY } from './api';
-export type { AcademyProfile } from './model';
+export type { AcademyProfile, UpsertAcademyInput } from './model';

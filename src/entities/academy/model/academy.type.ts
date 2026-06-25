@@ -1,3 +1,11 @@
+export interface UpsertAcademyInput {
+  name: string;
+  ownerName: string;
+  bizNo?: string;
+  tel?: string;
+  address?: string;
+}
+
 export interface AcademyProfile {
   ownerId: string;
   name: string;
