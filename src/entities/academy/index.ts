@@ -1,1 +1,2 @@
-export {}; // TODO: 모델/api/훅 노출 (도메인 단계)
+export { getAcademy, useGetAcademyQuery, ACADEMY_KEY } from './api';
+export type { AcademyProfile } from './model';
