@@ -5,3 +5,4 @@ export * from './FormField';
 export * from './IconButton';
 export * from './Icons';
 export * from './TextInput';
+export * from './Toast';
