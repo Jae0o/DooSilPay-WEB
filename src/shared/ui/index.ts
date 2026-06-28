@@ -1,4 +1,5 @@
 export * from './AppTitle';
+export * from './Avatar';
 export * from './Button';
 export * from './DooPayLogo';
 export * from './FormField';
