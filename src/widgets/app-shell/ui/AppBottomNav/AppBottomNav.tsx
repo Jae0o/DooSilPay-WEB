@@ -5,7 +5,7 @@ import { cn } from '@shared/utils';
 import { NAV_ITEMS } from '../../model';
 
 const AppBottomNav = () => (
-  <nav className="fixed inset-x-0 bottom-0 z-50 flex border-t border-line bg-surface px-[0.8rem] pt-[0.8rem] pb-[calc(0.8rem+env(safe-area-inset-bottom))]">
+  <nav className="flex border-t border-line bg-surface px-[0.8rem] pt-[0.8rem] pb-[calc(0.8rem+env(safe-area-inset-bottom))]">
     {NAV_ITEMS.map(({ path, label, Icon }) => (
       <NavLink
         key={path}
