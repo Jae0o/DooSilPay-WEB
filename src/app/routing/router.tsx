@@ -7,6 +7,7 @@ import { OnboardingPage } from '@pages/onboarding';
 import { SettingsPage } from '@pages/settings';
 import { StudentDetailPage } from '@pages/student-detail';
 import { StudentsPage } from '@pages/students';
+import { AppShell } from '@widgets/app-shell';
 
 import { ProtectedRoute } from './guards';
 
@@ -17,13 +18,18 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to="/students" replace /> },
       { path: '/onboarding/academy', element: <OnboardingPage /> },
-      { path: '/students', element: <StudentsPage /> },
-      { path: '/students/new', element: <StudentsPage /> },
-      { path: '/students/:id', element: <StudentDetailPage /> },
-      { path: '/payments/bulk', element: <BulkPaymentPage /> },
-      { path: '/issued-receipts', element: <IssuedReceiptsPage /> },
-      { path: '/issued-receipts/export', element: <IssuedReceiptsPage /> },
-      { path: '/settings/academy', element: <SettingsPage /> },
+      {
+        element: <AppShell />,
+        children: [
+          { path: '/students', element: <StudentsPage /> },
+          { path: '/students/new', element: <StudentsPage /> },
+          { path: '/students/:id', element: <StudentDetailPage /> },
+          { path: '/payments/bulk', element: <BulkPaymentPage /> },
+          { path: '/issued-receipts', element: <IssuedReceiptsPage /> },
+          { path: '/issued-receipts/export', element: <IssuedReceiptsPage /> },
+          { path: '/settings/academy', element: <SettingsPage /> },
+        ],
+      },
     ],
   },
 ]);
