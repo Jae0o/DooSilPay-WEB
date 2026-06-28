@@ -10,4 +10,8 @@ export { ArrowLeftIcon } from './ArrowLeftIcon';
 export { BuildingIcon } from './BuildingIcon';
 export { EditIcon } from './EditIcon';
 export { UploadIcon } from './UploadIcon';
+export { UsersIcon } from './UsersIcon';
+export { LayersIcon } from './LayersIcon';
+export { ReceiptIcon } from './ReceiptIcon';
+export { BellIcon } from './BellIcon';
 export type { IconProps } from './Icon.type';
