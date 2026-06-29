@@ -15,7 +15,8 @@ const useToastStore = create<ToastState>((set, get) => ({
   toasts: [],
 
   show: ({ message, variant = 'info', duration = DEFAULT_DURATION }) => {
-    const id = crypto.randomUUID();
+    // crypto.randomUUID 는 secure context(HTTPS·localhost)에서만 존재 → http+LAN IP(모바일) 대비 폴백
+    const id = crypto.randomUUID?.() ?? `toast-${Date.now()}-${Math.random().toString(36).slice(2)}`;
     set((state) => ({ toasts: [...state.toasts, { id, message, variant, duration }] }));
 
     if (duration > 0) setTimeout(() => get().dismiss(id), duration);
