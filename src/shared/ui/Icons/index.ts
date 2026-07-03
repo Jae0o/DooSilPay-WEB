@@ -14,4 +14,6 @@ export { UsersIcon } from './UsersIcon';
 export { LayersIcon } from './LayersIcon';
 export { ReceiptIcon } from './ReceiptIcon';
 export { BellIcon } from './BellIcon';
+export { ChevronDownIcon } from './ChevronDownIcon';
+export { CloseIcon } from './CloseIcon';
 export type { IconProps } from './Icon.type';
