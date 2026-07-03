@@ -13,5 +13,6 @@ export * from './IconButton';
 export * from './Icons';
 export * from './Modal';
 export * from './Select';
+export * from './Skeleton';
 export * from './TextInput';
 export * from './Toast';
