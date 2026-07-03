@@ -42,6 +42,7 @@
   --shadow-sm: 0 0.1rem 0.2rem rgba(24, 31, 41, 0.04), 0 0.1rem 0.3rem rgba(24, 31, 41, 0.05);
   --shadow-md: 0 0.4rem 1.4rem rgba(24, 31, 41, 0.06), 0 0.2rem 0.6rem rgba(24, 31, 41, 0.04);
   --shadow-lg: 0 1.4rem 4rem rgba(24, 31, 41, 0.1), 0 0.4rem 1.2rem rgba(24, 31, 41, 0.06);
+  --shadow-pop: 0 1.8rem 5rem rgba(24, 31, 41, 0.16);
 
   /* font */
   --font-sans:
