@@ -16,4 +16,7 @@ export { ReceiptIcon } from './ReceiptIcon';
 export { BellIcon } from './BellIcon';
 export { ChevronDownIcon } from './ChevronDownIcon';
 export { CloseIcon } from './CloseIcon';
+export { PlusIcon } from './PlusIcon';
+export { SearchIcon } from './SearchIcon';
+export { TrashIcon } from './TrashIcon';
 export type { IconProps } from './Icon.type';
