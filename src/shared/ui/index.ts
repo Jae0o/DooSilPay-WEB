@@ -15,5 +15,6 @@ export * from './Modal';
 export * from './PageHead';
 export * from './Select';
 export * from './Skeleton';
+export * from './TextField';
 export * from './TextInput';
 export * from './Toast';
