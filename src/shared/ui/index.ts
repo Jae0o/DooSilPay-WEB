@@ -12,6 +12,7 @@ export * from './FormField';
 export * from './IconButton';
 export * from './Icons';
 export * from './Modal';
+export * from './PageHead';
 export * from './Select';
 export * from './Skeleton';
 export * from './TextInput';
