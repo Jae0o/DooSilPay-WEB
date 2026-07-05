@@ -1,6 +1,17 @@
 import { NavLink } from 'react-router';
 
-import { ArrowLeftIcon, Avatar, Button, Card, EditIcon, PageHead, StudentStatusBadge, TrashIcon } from '@shared/ui';
+import {
+  ArrowLeftIcon,
+  Avatar,
+  Button,
+  Card,
+  EditIcon,
+  EmptyState,
+  PageHead,
+  ReceiptIcon,
+  StudentStatusBadge,
+  TrashIcon,
+} from '@shared/ui';
 import { formatCurrency, zeroPad } from '@shared/utils';
 
 import type { StudentDetailProps } from './StudentDetail.type';
@@ -72,10 +83,38 @@ const StudentDetail = ({ student, onEdit, onDelete }: StudentDetailProps) => {
           </div>
         </Card>
 
-        {/* 결제 요약 카드 → 04-02 에서 추가 */}
+        <Card pad="2.4rem" className="flex flex-col justify-center gap-[1.8rem]">
+          <div>
+            <p className="text-[1.4rem] text-ink-3">누적 납부액</p>
+            {/* Payment 연동 전 placeholder (R3) */}
+            <p className="tnum mt-[0.4rem] text-[1.9rem] font-extrabold tracking-[-0.03em]">—</p>
+          </div>
+
+          <div className="flex gap-[2.4rem]">
+            <div>
+              <p className="text-[1.3rem] text-ink-3">결제 건수</p>
+              <p className="tnum mt-[0.2rem] text-[1.25rem] font-bold">0</p>
+            </div>
+            <div>
+              <p className="text-[1.3rem] text-ink-3">미납</p>
+              <p className="tnum mt-[0.2rem] text-[1.25rem] font-bold">0</p>
+            </div>
+          </div>
+        </Card>
       </div>
 
-      {/* 결제 이력 카드 → 04-02 에서 추가 */}
+      {/* Payment 연동 시: 헤더 "결제 추가" 버튼을 결제 모달에 연결하고, EmptyState 자리를 PaymentRow 목록으로 교체 (R4) */}
+      <Card pad="0" className="mt-[1.6rem]">
+        <div className="border-b border-line px-[2.4rem] py-[1.8rem]">
+          <span className="text-[1.6rem] font-bold">결제 이력</span>
+        </div>
+
+        <EmptyState
+          icon={<ReceiptIcon size="2.8rem" />}
+          title="결제 내역이 없어요"
+          desc="결제 등록 기능은 준비 중이에요."
+        />
+      </Card>
     </section>
   );
 };
