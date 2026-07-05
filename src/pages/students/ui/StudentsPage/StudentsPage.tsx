@@ -1,19 +1,53 @@
-import { useQuery } from '@tanstack/react-query';
 import { motion, useReducedMotion } from 'motion/react';
 
-import { useUiStore } from '@shared/store';
+import { AsyncBoundary, Button, PageHead, PlusIcon, Skeleton } from '@shared/ui';
+
+import ActiveStudentCount from './ActiveStudentCount';
 
 const StudentsPage = () => {
   const shouldReduceMotion = useReducedMotion();
-  const isSidebarOpen = useUiStore((state) => state.isSidebarOpen);
-
-  // 골격 스모크: QueryClientProvider 하위에서 useQuery 동작 확인 (도메인 단계에서 교체)
-  useQuery({ queryKey: ['smoke'], queryFn: () => Promise.resolve('ok') });
 
   return (
-    <motion.section initial={shouldReduceMotion ? false : { opacity: 0 }} animate={{ opacity: 1 }}>
-      <h1>수강생</h1>
-      <p>sidebar: {String(isSidebarOpen)}</p>
+    <motion.section
+      initial={shouldReduceMotion ? false : { opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="px-[2.4rem] py-[2.8rem]"
+    >
+      <PageHead
+        title="수강생"
+        subtitle={
+          <AsyncBoundary errorSize="sm" skeleton={<Skeleton className="h-[1.4rem] w-[10rem]" />}>
+            <ActiveStudentCount />
+          </AsyncBoundary>
+        }
+        actions={
+          <>
+            <Button
+              variant="neutral"
+              onClick={() => {
+                /* TODO: 03-등록-수정-삭제에서 연결 */
+              }}
+            >
+              결제 등록
+            </Button>
+
+            <Button
+              icon={<PlusIcon size="1.8rem" />}
+              onClick={() => {
+                /* TODO: 03-등록-수정-삭제에서 연결 */
+              }}
+            >
+              수강생 등록
+            </Button>
+          </>
+        }
+      />
+
+      {/* MonthSummary 슬롯 — 02-02에서 채움 */}
+
+      {/* 검색 · 필터 슬롯 — 02-03에서 채움 */}
+
+      {/* 리스트 슬롯 — 02-03에서 채움 */}
     </motion.section>
   );
 };
