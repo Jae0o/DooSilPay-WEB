@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
-
 import type { ListStudentsParams } from '@entities/student';
 import { SearchIcon, Select, TextInput } from '@shared/ui';
 
 import type { StudentSearchBarProps } from './StudentSearchBar.type';
+import { useDebouncedKeyword } from './hooks';
 
 const STATUS_OPTIONS = [
   { value: 'active', label: '수강중' },
@@ -17,15 +16,7 @@ const SORT_OPTIONS = [
 ];
 
 const StudentSearchBar = ({ params, onChange }: StudentSearchBarProps) => {
-  const [keyword, setKeyword] = useState(params.q ?? '');
-
-  useEffect(() => {
-    if ((params.q ?? '') === keyword) return; // mount 직후·동일 값이면 발화하지 않음 (초기 중복 fetch 방지)
-
-    const id = setTimeout(() => onChange({ q: keyword || undefined, page: 1 }), 300);
-
-    return () => clearTimeout(id);
-  }, [keyword, params.q, onChange]);
+  const [keyword, setKeyword] = useDebouncedKeyword({ q: params.q, onChange });
 
   return (
     <div className="mb-[1.8rem] flex flex-wrap gap-[1.2rem]">
