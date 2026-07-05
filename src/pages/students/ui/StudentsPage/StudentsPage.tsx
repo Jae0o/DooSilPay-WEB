@@ -2,6 +2,8 @@ import { motion, useReducedMotion } from 'motion/react';
 
 import { AsyncBoundary, Button, PageHead, PlusIcon, Skeleton } from '@shared/ui';
 
+import { MonthSummary } from '../MonthSummary';
+
 import ActiveStudentCount from './ActiveStudentCount';
 
 const StudentsPage = () => {
@@ -43,7 +45,7 @@ const StudentsPage = () => {
         }
       />
 
-      {/* MonthSummary 슬롯 — 02-02에서 채움 */}
+      <MonthSummary />
 
       {/* 검색 · 필터 슬롯 — 02-03에서 채움 */}
 
