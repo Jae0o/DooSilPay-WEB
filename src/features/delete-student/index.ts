@@ -1,0 +1,1 @@
+export { DeleteStudentDialog } from './ui';
