@@ -1,13 +1,26 @@
 import { motion, useReducedMotion } from 'motion/react';
+import { useCallback, useState, useTransition } from 'react';
 
+import type { ListStudentsParams } from '@entities/student';
 import { AsyncBoundary, Button, PageHead, PlusIcon, Skeleton } from '@shared/ui';
 
 import { MonthSummary } from '../MonthSummary';
+import { StudentListSkeleton } from '../StudentListSkeleton';
+import { StudentSearchBar } from '../StudentSearchBar';
 
 import ActiveStudentCount from './ActiveStudentCount';
+import StudentListLoader from './StudentListLoader';
 
 const StudentsPage = () => {
   const shouldReduceMotion = useReducedMotion();
+
+  const [params, setParams] = useState<ListStudentsParams>({ status: 'active' });
+  const [isPending, startTransition] = useTransition(); // params 변경 시 skeleton 재진입 방지 — 이전 UI 유지 (R18)
+
+  const patchParams = useCallback(
+    (patch: Partial<ListStudentsParams>) => startTransition(() => setParams((p) => ({ ...p, ...patch }))),
+    [],
+  );
 
   return (
     <motion.section
@@ -47,9 +60,16 @@ const StudentsPage = () => {
 
       <MonthSummary />
 
-      {/* 검색 · 필터 슬롯 — 02-03에서 채움 */}
+      <StudentSearchBar params={params} onChange={patchParams} />
 
-      {/* 리스트 슬롯 — 02-03에서 채움 */}
+      <div className={isPending ? 'opacity-60' : ''}>
+        <AsyncBoundary errorSize="md" skeleton={<StudentListSkeleton />} resetKeys={[params]}>
+          <StudentListLoader
+            params={params}
+            onLoadMore={() => patchParams({ limit: Math.min((params.limit ?? 20) + 20, 100) })}
+          />
+        </AsyncBoundary>
+      </div>
     </motion.section>
   );
 };
