@@ -1,1 +1,17 @@
-export {}; // TODO: 모델/api/훅 노출 (도메인 단계)
+export {
+  STUDENT_KEY,
+  useStudentsQuery,
+  useStudentQuery,
+  useCreateStudentMutation,
+  useUpdateStudentMutation,
+  useUpdateStudentStatusMutation,
+  useDeleteStudentMutation,
+} from './api';
+export type {
+  Student,
+  StudentStatus,
+  CreateStudentInput,
+  UpdateStudentInput,
+  ListStudentsParams,
+  ListStudentsResult,
+} from './model';
