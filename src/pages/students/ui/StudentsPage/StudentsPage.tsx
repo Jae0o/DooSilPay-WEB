@@ -1,8 +1,9 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { useCallback, useState, useTransition } from 'react';
+import { useNavigate } from 'react-router';
 
-import type { ListStudentsParams } from '@entities/student';
+import { DeleteStudentDialog } from '@features/delete-student';
 import { AsyncBoundary, Button, PageHead, PlusIcon, Skeleton } from '@shared/ui';
+import { StudentFormModal } from '@widgets/student-form-modal';
 
 import { MonthSummary } from '../MonthSummary';
 import { StudentListSkeleton } from '../StudentListSkeleton';
@@ -10,17 +11,15 @@ import { StudentSearchBar } from '../StudentSearchBar';
 
 import ActiveStudentCount from './ActiveStudentCount';
 import StudentListLoader from './StudentListLoader';
+import { useStudentListParams, useStudentModals } from './hooks';
 
 const StudentsPage = () => {
   const shouldReduceMotion = useReducedMotion();
+  const navigate = useNavigate();
 
-  const [params, setParams] = useState<ListStudentsParams>({ status: 'active' });
-  const [isPending, startTransition] = useTransition(); // params 변경 시 skeleton 재진입 방지 — 이전 UI 유지 (R18)
-
-  const patchParams = useCallback(
-    (patch: Partial<ListStudentsParams>) => startTransition(() => setParams((p) => ({ ...p, ...patch }))),
-    [],
-  );
+  const { params, isPending, patchParams, loadMore } = useStudentListParams();
+  const { form, deleteTarget, deleteOpen, openCreate, openEdit, openDelete, closeForm, closeDelete } =
+    useStudentModals();
 
   return (
     <motion.section
@@ -37,21 +36,11 @@ const StudentsPage = () => {
         }
         actions={
           <>
-            <Button
-              variant="neutral"
-              onClick={() => {
-                /* TODO: 03-등록-수정-삭제에서 연결 */
-              }}
-            >
+            <Button variant="neutral" onClick={() => navigate('/payments/bulk')}>
               결제 등록
             </Button>
 
-            <Button
-              icon={<PlusIcon size="1.8rem" />}
-              onClick={() => {
-                /* TODO: 03-등록-수정-삭제에서 연결 */
-              }}
-            >
+            <Button icon={<PlusIcon size="1.8rem" />} onClick={openCreate}>
               수강생 등록
             </Button>
           </>
@@ -64,12 +53,14 @@ const StudentsPage = () => {
 
       <div className={isPending ? 'opacity-60' : ''}>
         <AsyncBoundary errorSize="md" skeleton={<StudentListSkeleton />} resetKeys={[params]}>
-          <StudentListLoader
-            params={params}
-            onLoadMore={() => patchParams({ limit: Math.min((params.limit ?? 20) + 20, 100) })}
-          />
+          <StudentListLoader params={params} onLoadMore={loadMore} onEdit={openEdit} onDelete={openDelete} />
         </AsyncBoundary>
       </div>
+
+      <StudentFormModal open={form.open} mode={form.mode} student={form.student} onClose={closeForm} />
+
+      {/* 닫을 때 target을 null로 만들면 exit 애니메이션 중 언마운트되어 모션이 잘림 — open prop으로만 제어 */}
+      {deleteTarget && <DeleteStudentDialog open={deleteOpen} student={deleteTarget} onClose={closeDelete} />}
     </motion.section>
   );
 };
