@@ -35,8 +35,8 @@ const StudentTable = ({ students, onRowClick, onEdit, onDelete }: StudentTablePr
                 <Avatar name={s.name} size="4rem" />
 
                 <div className="min-w-0">
-                  <p className="truncate font-bold">{s.name}</p>
-                  <p className="truncate text-[1.4rem] text-ink-3">{s.subjectName ?? '-'}</p>
+                  <p className="font-bold">{s.name}</p>
+                  <p className="text-[1.4rem] text-ink-3">{s.subjectName ?? '-'}</p>
                 </div>
               </div>
             </td>
