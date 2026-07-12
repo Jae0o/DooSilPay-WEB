@@ -21,4 +21,6 @@ export { SearchIcon } from './SearchIcon';
 export { TrashIcon } from './TrashIcon';
 export { CheckIcon } from './CheckIcon';
 export { CopyIcon } from './CopyIcon';
+export { ImageIcon } from './ImageIcon';
+export { LogoutIcon } from './LogoutIcon';
 export type { IconProps } from './Icon.type';
