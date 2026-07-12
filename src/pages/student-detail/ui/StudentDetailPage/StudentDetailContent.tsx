@@ -23,6 +23,10 @@ const StudentDetailContent = ({ id }: { id: string }) => {
         onEdit={() => setEditOpen(true)}
         onDelete={() => setDeleteOpen(true)}
         onAddPayment={() => setPayOpen(true)}
+        // 결제 행 액션 — 04-01~03에서 모달 상태에 연결
+        onMarkPaid={() => {}}
+        onEditPayment={() => {}}
+        onDeletePayment={() => {}}
       />
 
       <StudentFormModal open={editOpen} mode="edit" student={student} onClose={() => setEditOpen(false)} />

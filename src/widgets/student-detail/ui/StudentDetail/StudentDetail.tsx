@@ -2,18 +2,22 @@ import { NavLink } from 'react-router';
 
 import {
   ArrowLeftIcon,
+  AsyncBoundary,
   Avatar,
   Button,
   Card,
   EditIcon,
-  EmptyState,
   PageHead,
   PlusIcon,
-  ReceiptIcon,
   StudentStatusBadge,
   TrashIcon,
 } from '@shared/ui';
 import { formatCurrency, zeroPad } from '@shared/utils';
+
+import { PaymentHistory } from '../PaymentHistory';
+import { PaymentHistorySkeleton } from '../PaymentHistorySkeleton';
+import { PaymentSummaryCard } from '../PaymentSummaryCard';
+import { PaymentSummarySkeleton } from '../PaymentSummarySkeleton';
 
 import type { StudentDetailProps } from './StudentDetail.type';
 import { useToggleStudentStatus } from './hooks';
@@ -25,7 +29,15 @@ const Info = ({ label, value }: { label: string; value?: string }) => (
   </div>
 );
 
-const StudentDetail = ({ student, onEdit, onDelete, onAddPayment }: StudentDetailProps) => {
+const StudentDetail = ({
+  student,
+  onEdit,
+  onDelete,
+  onAddPayment,
+  onMarkPaid,
+  onEditPayment,
+  onDeletePayment,
+}: StudentDetailProps) => {
   const { toggle, isPending } = useToggleStudentStatus({ student });
 
   return (
@@ -85,37 +97,28 @@ const StudentDetail = ({ student, onEdit, onDelete, onAddPayment }: StudentDetai
           </div>
         </Card>
 
+        {/* 카드 셸 유지, 내부 수치만 독립 경계로 감싼다 (R3) */}
         <Card pad="2.4rem" className="flex flex-col justify-center gap-[1.8rem]">
-          <div>
-            <p className="text-[1.4rem] text-ink-3">누적 납부액</p>
-            {/* Payment 연동 전 placeholder (R3) */}
-            <p className="tnum mt-[0.4rem] text-[1.9rem] font-extrabold tracking-[-0.03em]">—</p>
-          </div>
-
-          <div className="flex gap-[2.4rem]">
-            <div>
-              <p className="text-[1.3rem] text-ink-3">결제 건수</p>
-              <p className="tnum mt-[0.2rem] text-[1.25rem] font-bold">0</p>
-            </div>
-            <div>
-              <p className="text-[1.3rem] text-ink-3">미납</p>
-              <p className="tnum mt-[0.2rem] text-[1.25rem] font-bold">0</p>
-            </div>
-          </div>
+          <AsyncBoundary errorSize="sm" skeleton={<PaymentSummarySkeleton />} resetKeys={[student.id]}>
+            <PaymentSummaryCard studentId={student.id} />
+          </AsyncBoundary>
         </Card>
       </div>
 
-      {/* Payment 연동 시: 헤더 "결제 추가" 버튼을 결제 모달에 연결하고, EmptyState 자리를 PaymentRow 목록으로 교체 (R4) */}
+      {/* 이력 카드 셸은 유지, 내부만 독립 경계로 감싼다 — 프로필/요약과 별도 suspend (R4) */}
       <Card pad="0" className="mt-[1.6rem]">
         <div className="border-b border-line px-[2.4rem] py-[1.8rem]">
           <span className="text-[1.6rem] font-bold">결제 이력</span>
         </div>
 
-        <EmptyState
-          icon={<ReceiptIcon size="2.8rem" />}
-          title="결제 내역이 없어요"
-          desc="결제 등록 기능은 준비 중이에요."
-        />
+        <AsyncBoundary errorSize="sm" skeleton={<PaymentHistorySkeleton />} resetKeys={[student.id]}>
+          <PaymentHistory
+            studentId={student.id}
+            onMarkPaid={onMarkPaid}
+            onEdit={onEditPayment}
+            onDelete={onDeletePayment}
+          />
+        </AsyncBoundary>
       </Card>
     </section>
   );
