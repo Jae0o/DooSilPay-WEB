@@ -17,7 +17,7 @@ const MonthSummary = () => {
         <div className="min-w-[22rem]">
           <p className="text-[1.4rem] font-semibold text-ink-3">{label}</p>
 
-          <p className="mt-[0.6rem] flex items-baseline gap-[0.8rem]">
+          <div className="mt-[0.6rem] flex items-baseline gap-[0.8rem]">
             <span className="tnum text-[2.3rem] font-extrabold tracking-[-0.03em]">{paidCount}</span>
 
             <span className="tnum text-[1.2rem] font-bold text-ink-3">
@@ -25,7 +25,7 @@ const MonthSummary = () => {
                 <ActiveStudentTotal />
               </AsyncBoundary>
             </span>
-          </p>
+          </div>
 
           <p className="tnum mt-[0.4rem] text-[1.3rem] text-ink-3">수납액 {collected}</p>
         </div>
