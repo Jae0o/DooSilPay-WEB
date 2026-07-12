@@ -16,6 +16,7 @@ import type { PaymentFormValues } from '../../PaymentFormModal.type';
 import type { UsePaymentFormParams } from './usePaymentForm.type';
 
 const toPeriod = (date: Date) => `${date.getFullYear()}-${zeroPad(date.getMonth() + 1)}`;
+const toDateStr = (date: Date) => `${date.getFullYear()}-${zeroPad(date.getMonth() + 1)}-${zeroPad(date.getDate())}`;
 
 // 조건부 마운트(모달 오픈마다 재마운트) — defaultValues로 초기화, 별도 reset effect 불필요
 const buildDefaults = ({
@@ -44,7 +45,7 @@ const buildDefaults = ({
     tuitionFee: String(student.monthlyFee),
     otherFees: [],
     method: '',
-    status: 'scheduled',
+    status: 'paid', // 등록 기본 = 수납 완료
   };
 };
 
@@ -102,7 +103,9 @@ const usePaymentForm = ({ mode, student, payment, onClose, onSuccess }: UsePayme
     };
 
     if (mode === 'create') {
-      const input: CreatePaymentInput = { studentId: student.id, ...base };
+      // 수납 완료로 등록 시 납부일=오늘(폼 미노출 — paid는 납부일 필요). 그 외 상태는 null
+      const paidDate = values.status === 'paid' ? toDateStr(new Date()) : null;
+      const input: CreatePaymentInput = { studentId: student.id, ...base, paidDate };
       create.mutate(input, { onSuccess: onSuccessHandler, onError });
       return;
     }
