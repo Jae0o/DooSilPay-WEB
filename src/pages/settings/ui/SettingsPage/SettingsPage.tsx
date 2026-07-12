@@ -1,24 +1,20 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { useForm } from 'react-hook-form';
 
-import type { UpsertAcademyInput } from '@entities/academy';
-import { PageHead } from '@shared/ui';
+import type { AcademyProfile } from '@entities/academy';
+import { useGetAcademyQuery } from '@entities/academy';
+import { Button, CheckIcon, PageHead } from '@shared/ui';
 
 import { AcademyInfoSection } from '../AcademyInfoSection';
 import { AccountSection } from '../AccountSection';
+import { SettingsSaveBar } from '../SettingsSaveBar';
 import { SignatureSection } from '../SignatureSection';
 
-const SettingsPage = () => {
-  const shouldReduceMotion = useReducedMotion();
+import { useSettingsForm } from './hooks';
 
-  // 임시 폼 — 02-01에서 서버값·useSettingsForm으로 교체
-  const {
-    register,
-    formState: { errors },
-  } = useForm<UpsertAcademyInput>({
-    mode: 'onTouched',
-    defaultValues: { name: '', ownerName: '', bizNo: '', tel: '', address: '' },
-  });
+// academy 로드 후 마운트 — defaultValues 안전 (StudentDetail Content 위임 관례)
+const SettingsContent = ({ academy }: { academy: AcademyProfile }) => {
+  const shouldReduceMotion = useReducedMotion();
+  const { register, errors, isDirty, isPending, save, revert } = useSettingsForm({ academy });
 
   return (
     <motion.section
@@ -26,15 +22,41 @@ const SettingsPage = () => {
       animate={{ opacity: 1 }}
       className="max-w-[72rem]"
     >
-      <PageHead title="설정" subtitle="학원 정보와 발급 주체 정보를 관리해요." />
+      <PageHead
+        title="설정"
+        subtitle="학원 정보와 발급 주체 정보를 관리해요."
+        actions={
+          <>
+            {isDirty && (
+              <Button variant="neutral" onClick={revert}>
+                되돌리기
+              </Button>
+            )}
+            <Button icon={<CheckIcon size="1.8rem" />} onClick={save} disabled={!isDirty} isLoading={isPending}>
+              저장
+            </Button>
+          </>
+        }
+      />
 
       <AcademyInfoSection register={register} errors={errors} />
-      <SignatureSection />
-      <AccountSection ownerName="" />
+      <SignatureSection signatureUrl={academy.signatureUrl} />
+      <AccountSection ownerName={academy.ownerName} />
 
-      {/* 스티키 저장 바 자리: 02-02 */}
+      {/* S9: 상단 액션과 동일한 save/revert 공유 — dirty 시에만 등장 */}
+      {isDirty && <SettingsSaveBar isPending={isPending} onRevert={revert} onSave={save} />}
     </motion.section>
   );
+};
+
+const SettingsPage = () => {
+  const { data: academy } = useGetAcademyQuery();
+
+  // ProtectedRoute가 academyPending 동안 null 렌더 → 마운트 시 캐시 보장.
+  // null(온보딩 리다이렉트 중)·undefined 방어만 (분석 §8·V2-1)
+  if (!academy) return null;
+
+  return <SettingsContent academy={academy} />;
 };
 
 export default SettingsPage;
