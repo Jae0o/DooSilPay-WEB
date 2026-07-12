@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
-import { type BulkPaymentRow, dueDateFor, useBulkCreatePaymentsMutation } from '@entities/payment';
+import { type BulkPaymentRow, type BulkSkippedRow, dueDateFor, useBulkCreatePaymentsMutation } from '@entities/payment';
 import { useStudentsQuery } from '@entities/student';
 import { useToast } from '@shared/hooks';
 import { zeroPad } from '@shared/utils';
@@ -35,6 +35,19 @@ export const isRowValid = (row: BulkPaymentRowValues) =>
 
 export const isRowFilled = (row: BulkPaymentRowValues) =>
   Boolean(row.studentId || row.tuitionFee || row.otherFees.length);
+
+// 배치 결과 → 폼 반영 계산(순수): skipped 요청 idx를 폼 idx로 역산 · 성공(created) 행 제거 인덱스(내림차순)
+export const resolveBulkOutcome = (validEntries: { index: number }[], skipped: BulkSkippedRow[]) => {
+  const skippedReq = new Set(skipped.map((s) => s.index));
+
+  return {
+    reasons: skipped.map((s) => ({ index: validEntries[s.index].index, reason: s.reason })),
+    removeIndices: validEntries
+      .filter((_, reqIndex) => !skippedReq.has(reqIndex))
+      .map(({ index }) => index)
+      .sort((a, b) => b - a),
+  };
+};
 
 // 유효 행 → 요청 행 매핑(빈 문자열 → null, 완성 기타경비만 ≤3)
 const toBulkRow = (row: BulkPaymentRowValues): BulkPaymentRow => ({
@@ -140,17 +153,10 @@ const useBulkPaymentForm = () => {
       { period: getValues('period'), rows: validEntries.map(({ row }) => toBulkRow(row)) },
       {
         onSuccess: ({ created, skipped }) => {
-          const skippedReq = new Set(skipped.map((s) => s.index));
+          const { reasons, removeIndices } = resolveBulkOutcome(validEntries, skipped);
 
-          // skipped: 요청 idx → 폼 idx 역산 후 사유 세팅
-          skipped.forEach((s) => setValue(`rows.${validEntries[s.index].index}.skippedReason`, s.reason));
-
-          // created: 해당 폼 행 제거(인덱스 밀림 방지 — 내림차순)
-          validEntries
-            .filter((_, reqIndex) => !skippedReq.has(reqIndex))
-            .map(({ index }) => index)
-            .sort((a, b) => b - a)
-            .forEach((index) => remove(index));
+          reasons.forEach(({ index, reason }) => setValue(`rows.${index}.skippedReason`, reason)); // skipped 사유 세팅
+          removeIndices.forEach((index) => remove(index)); // created 행 제거(내림차순 — 인덱스 밀림 방지)
 
           if (skipped.length === 0) {
             show({ message: `${created.length}건을 납부 완료로 등록했어요.`, variant: 'success' });
