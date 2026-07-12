@@ -108,8 +108,8 @@ const usePaymentForm = ({ mode, student, payment, onClose, onSuccess }: UsePayme
     }
     if (!payment) return;
 
-    // 전체 교체 PUT — 폼 미노출 paidDate 유실 방지 (P15)
-    const input: UpdatePaymentInput = { ...base, paidDate: payment.paidDate };
+    // 전체 교체 PUT — 폼 미노출 필드(paidDate·memo) 유실 방지 (P15, 04-01)
+    const input: UpdatePaymentInput = { ...base, paidDate: payment.paidDate, memo: payment.memo };
     update.mutate({ id: payment.id, input }, { onSuccess: onSuccessHandler, onError });
   };
 
