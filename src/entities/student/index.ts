@@ -1,6 +1,7 @@
 export {
   STUDENT_KEY,
   useStudentsQuery,
+  useStudentsSummaryQuery,
   useStudentQuery,
   useCreateStudentMutation,
   useUpdateStudentMutation,
@@ -14,4 +15,5 @@ export type {
   UpdateStudentInput,
   ListStudentsParams,
   ListStudentsResult,
+  StudentsSummary,
 } from './model';
