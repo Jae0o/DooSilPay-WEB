@@ -2,10 +2,14 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { useStudentQuery } from '@entities/student';
+import { DeletePaymentDialog } from '@features/delete-payment';
 import { DeleteStudentDialog } from '@features/delete-student';
+import { MarkPaidDialog } from '@features/mark-paid';
 import { PaymentFormModal } from '@widgets/payment-form-modal';
 import { StudentDetail } from '@widgets/student-detail';
 import { StudentFormModal } from '@widgets/student-form-modal';
+
+import { usePaymentModals } from './hooks';
 
 // 경계 내부 데이터 컴포넌트 — suspend/에러는 AsyncBoundary가 수신 (R18)
 const StudentDetailContent = ({ id }: { id: string }) => {
@@ -14,7 +18,7 @@ const StudentDetailContent = ({ id }: { id: string }) => {
 
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [payOpen, setPayOpen] = useState(false);
+  const { modal, openCreate, openEdit, openDelete, openMarkPaid, close } = usePaymentModals();
 
   return (
     <>
@@ -22,15 +26,21 @@ const StudentDetailContent = ({ id }: { id: string }) => {
         student={student}
         onEdit={() => setEditOpen(true)}
         onDelete={() => setDeleteOpen(true)}
-        onAddPayment={() => setPayOpen(true)}
-        // 결제 행 액션 — 04-01~03에서 모달 상태에 연결
-        onMarkPaid={() => {}}
-        onEditPayment={() => {}}
-        onDeletePayment={() => {}}
+        onAddPayment={openCreate}
+        onEditPayment={openEdit}
+        onDeletePayment={openDelete}
+        onMarkPaid={openMarkPaid}
       />
 
       <StudentFormModal open={editOpen} mode="edit" student={student} onClose={() => setEditOpen(false)} />
-      {payOpen && <PaymentFormModal mode="create" student={student} onClose={() => setPayOpen(false)} />}
+
+      {modal?.type === 'create' && <PaymentFormModal mode="create" student={student} onClose={close} />}
+      {modal?.type === 'edit' && (
+        <PaymentFormModal mode="edit" student={student} payment={modal.payment} onClose={close} />
+      )}
+      {modal?.type === 'delete' && <DeletePaymentDialog payment={modal.payment} onClose={close} />}
+      {modal?.type === 'markPaid' && <MarkPaidDialog payment={modal.payment} onClose={close} />}
+
       <DeleteStudentDialog
         open={deleteOpen}
         student={student}
