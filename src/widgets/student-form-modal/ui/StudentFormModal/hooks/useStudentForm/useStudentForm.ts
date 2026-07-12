@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 
 import {
   type CreateStudentInput,
@@ -42,9 +42,9 @@ const useStudentForm = ({ open, onClose, mode, student }: UseStudentFormParams) 
 
   const {
     register,
+    control,
     handleSubmit,
     reset,
-    watch,
     formState: { errors },
   } = useForm<StudentFormValues>({ mode: 'onTouched', defaultValues: EMPTY });
 
@@ -67,7 +67,8 @@ const useStudentForm = ({ open, onClose, mode, student }: UseStudentFormParams) 
     );
   }, [open, mode, student, reset]);
 
-  const guardianName = watch('guardianName');
+  // watch() 대신 useWatch — React Compiler incompatible-library 경고 회피(PaymentFormModal·useMarkPaid 선례)
+  const guardianName = useWatch({ control, name: 'guardianName' });
 
   const onSubmit = (values: StudentFormValues) => {
     const input = toInput(values);
