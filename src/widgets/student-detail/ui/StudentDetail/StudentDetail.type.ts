@@ -4,4 +4,5 @@ export interface StudentDetailProps {
   student: Student;
   onEdit: () => void;
   onDelete: () => void;
+  onAddPayment: () => void;
 }

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 
 import { useStudentQuery } from '@entities/student';
 import { DeleteStudentDialog } from '@features/delete-student';
+import { PaymentFormModal } from '@widgets/payment-form-modal';
 import { StudentDetail } from '@widgets/student-detail';
 import { StudentFormModal } from '@widgets/student-form-modal';
 
@@ -13,12 +14,19 @@ const StudentDetailContent = ({ id }: { id: string }) => {
 
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [payOpen, setPayOpen] = useState(false);
 
   return (
     <>
-      <StudentDetail student={student} onEdit={() => setEditOpen(true)} onDelete={() => setDeleteOpen(true)} />
+      <StudentDetail
+        student={student}
+        onEdit={() => setEditOpen(true)}
+        onDelete={() => setDeleteOpen(true)}
+        onAddPayment={() => setPayOpen(true)}
+      />
 
       <StudentFormModal open={editOpen} mode="edit" student={student} onClose={() => setEditOpen(false)} />
+      {payOpen && <PaymentFormModal mode="create" student={student} onClose={() => setPayOpen(false)} />}
       <DeleteStudentDialog
         open={deleteOpen}
         student={student}

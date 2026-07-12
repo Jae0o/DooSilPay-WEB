@@ -8,6 +8,7 @@ import {
   EditIcon,
   EmptyState,
   PageHead,
+  PlusIcon,
   ReceiptIcon,
   StudentStatusBadge,
   TrashIcon,
@@ -24,7 +25,7 @@ const Info = ({ label, value }: { label: string; value?: string }) => (
   </div>
 );
 
-const StudentDetail = ({ student, onEdit, onDelete }: StudentDetailProps) => {
+const StudentDetail = ({ student, onEdit, onDelete, onAddPayment }: StudentDetailProps) => {
   const { toggle, isPending } = useToggleStudentStatus({ student });
 
   return (
@@ -48,10 +49,11 @@ const StudentDetail = ({ student, onEdit, onDelete }: StudentDetailProps) => {
             <Button variant="neutral" onClick={toggle} disabled={isPending}>
               {student.status === 'active' ? '휴식 전환' : '수강 전환'}
             </Button>
-            {/* 결제 추가: Payment 후속 → disabled 안내 */}
-            <Button variant="secondary" disabled>
-              결제 추가 (준비 중)
+
+            <Button variant="secondary" icon={<PlusIcon size="1.8rem" />} onClick={onAddPayment}>
+              결제 추가
             </Button>
+
             <Button variant="danger" icon={<TrashIcon size="1.8rem" />} onClick={onDelete}>
               삭제
             </Button>
