@@ -8,4 +8,7 @@ export const STUDENT_KEY = {
 
   details: () => [...STUDENT_KEY.all, 'detail'] as const,
   detail: (id: string) => [...STUDENT_KEY.details(), id] as const,
+
+  summaries: () => [...STUDENT_KEY.all, 'summary'] as const,
+  summary: (period: string) => [...STUDENT_KEY.summaries(), period] as const,
 };
