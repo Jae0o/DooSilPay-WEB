@@ -1,9 +1,15 @@
 import { useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 
-import { METHOD_LABEL, type PaymentMethod, type PaymentStatus, STATUS_LABEL } from '@entities/payment';
+import {
+  METHOD_LABEL,
+  type PaymentMethod,
+  type PaymentStatus,
+  STATUS_LABEL,
+  buildPeriodOptions,
+} from '@entities/payment';
 import { Button, FormField, IconButton, Modal, PlusIcon, Select, TextField, TextInput, TrashIcon } from '@shared/ui';
-import { formatCurrency, formatPeriod, zeroPad } from '@shared/utils';
+import { formatCurrency } from '@shared/utils';
 
 import type { PaymentFormModalProps } from './PaymentFormModal.type';
 import { usePaymentForm } from './hooks';
@@ -16,20 +22,6 @@ const STATUS_OPTIONS = (Object.keys(STATUS_LABEL) as PaymentStatus[]).map((value
   value,
   label: STATUS_LABEL[value],
 }));
-
-// 디자인 stPeriods(): 현재월 기준 +1 ~ −2, 최신이 위 (소비처 1곳 — 벌크 재사용 시 utils 승격)
-const PERIOD_OFFSETS = [1, 0, -1, -2];
-
-const buildPeriodOptions = () => {
-  const now = new Date();
-
-  return PERIOD_OFFSETS.map((offset) => {
-    const date = new Date(now.getFullYear(), now.getMonth() + offset, 1);
-    const value = `${date.getFullYear()}-${zeroPad(date.getMonth() + 1)}`;
-
-    return { value, label: formatPeriod(value) };
-  });
-};
 
 const PaymentFormModal = ({ mode, student, payment, onClose, onSuccess }: PaymentFormModalProps) => {
   const { register, control, errors, fields, append, remove, isPending, submit } = usePaymentForm({
