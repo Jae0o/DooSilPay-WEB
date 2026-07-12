@@ -19,4 +19,6 @@ export { CloseIcon } from './CloseIcon';
 export { PlusIcon } from './PlusIcon';
 export { SearchIcon } from './SearchIcon';
 export { TrashIcon } from './TrashIcon';
+export { CheckIcon } from './CheckIcon';
+export { CopyIcon } from './CopyIcon';
 export type { IconProps } from './Icon.type';
