@@ -8,7 +8,7 @@ export {
   useBulkCreatePaymentsMutation,
 } from './api';
 export { PaymentStatusBadge } from './ui';
-export { sumOtherFees, paymentTotal, dueDateFor } from './utils';
+export { sumOtherFees, paymentTotal, dueDateFor, buildPeriodOptions } from './utils';
 export { METHOD_LABEL, STATUS_LABEL, STATUS_TONE } from './model';
 export type {
   Payment,
