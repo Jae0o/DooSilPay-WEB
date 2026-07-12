@@ -1,0 +1,1 @@
+export { changePasswordWithReauth } from './changePasswordWithReauth';

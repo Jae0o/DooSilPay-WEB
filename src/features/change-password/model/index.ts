@@ -1,1 +1,1 @@
-export type { ChangePasswordForm } from './change-password.type';
+export type { ChangePasswordForm, ChangePasswordWithReauthInput } from './change-password.type';
