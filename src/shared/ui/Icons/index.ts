@@ -23,4 +23,7 @@ export { CheckIcon } from './CheckIcon';
 export { CopyIcon } from './CopyIcon';
 export { ImageIcon } from './ImageIcon';
 export { LogoutIcon } from './LogoutIcon';
+export { PrinterIcon } from './PrinterIcon';
+export { EyeIcon } from './EyeIcon';
+export { DownloadIcon } from './DownloadIcon';
 export type { IconProps } from './Icon.type';
