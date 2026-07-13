@@ -41,10 +41,10 @@ const SettingsContent = ({ academy }: { academy: AcademyProfile }) => {
       />
 
       <AcademyInfoSection register={register} errors={errors} />
-      <SignatureSection signatureUrl={academy.signatureUrl} />
-      <AccountSection ownerName={academy.ownerName} />
       {/* 즉시 저장 — dirty/저장 바와 무관, 카드 내부 지역 경계(SJ3·SJ10) */}
       <SubjectsSection />
+      <SignatureSection signatureUrl={academy.signatureUrl} />
+      <AccountSection ownerName={academy.ownerName} />
 
       {/* S9: 상단 액션과 동일한 save/revert 공유 — dirty 시에만 등장 */}
       {isDirty && <SettingsSaveBar isPending={isPending} onRevert={revert} onSave={save} />}
