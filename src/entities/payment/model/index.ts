@@ -12,6 +12,7 @@ export type {
   BulkPaymentRow,
   BulkCreatePaymentsInput,
   BulkSkippedRow,
+  BulkIssueSkippedRow,
   BulkCreatePaymentsResult,
 } from './payment.bulk.type';
 export { METHOD_LABEL, STATUS_LABEL, STATUS_TONE } from './payment.constants';

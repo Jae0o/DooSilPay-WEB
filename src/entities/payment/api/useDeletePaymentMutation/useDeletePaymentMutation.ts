@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { ISSUED_RECEIPT_KEY } from '@entities/issued-receipt';
 import { STUDENT_KEY } from '@entities/student';
 import type { APIResponse } from '@shared/api';
 import { httpClient } from '@shared/api';
@@ -20,6 +21,7 @@ const useDeletePaymentMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: PAYMENT_KEY.lists() });
       queryClient.invalidateQueries({ queryKey: STUDENT_KEY.summaries() }); // 수납 현황 갱신 — P16
+      queryClient.invalidateQueries({ queryKey: ISSUED_RECEIPT_KEY.lists() }); // 발급분 cascade 삭제 반영 — RW-5
     },
   });
 };
