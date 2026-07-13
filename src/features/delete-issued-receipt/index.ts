@@ -1,0 +1,1 @@
+export { DeleteIssuedReceiptDialog } from './ui';
