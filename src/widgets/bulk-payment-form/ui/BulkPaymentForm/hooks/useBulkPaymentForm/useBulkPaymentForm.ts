@@ -72,6 +72,7 @@ const useBulkPaymentForm = () => {
   useSubjectsQuery(); // V2-2: 과목 캐시 워밍 — 행별 SubjectSelectField가 페이지 경계에서 함께 조회(행 suspend 방지)
 
   const [tried, setTried] = useState(false); // 제출 시도 후 오류 행 하이라이트 활성
+  const [alsoIssue, setAlsoIssue] = useState(false); // RW-9 — 저장과 동시에 교부영수증 일괄 발급
 
   const { register, control, getValues, setValue } = useForm<BulkPaymentFormValues>({
     mode: 'onTouched',
@@ -152,16 +153,23 @@ const useBulkPaymentForm = () => {
     validEntries.forEach(({ index }) => setValue(`rows.${index}.skippedReason`, undefined)); // 재제출 — 이전 사유 초기화
 
     bulk.mutate(
-      { period: getValues('period'), rows: validEntries.map(({ row }) => toBulkRow(row)) },
+      { period: getValues('period'), rows: validEntries.map(({ row }) => toBulkRow(row)), alsoIssue },
       {
-        onSuccess: ({ created, skipped }) => {
+        onSuccess: ({ created, skipped, issued, issueSkipped }) => {
           const { reasons, removeIndices } = resolveBulkOutcome(validEntries, skipped);
 
           reasons.forEach(({ index, reason }) => setValue(`rows.${index}.skippedReason`, reason)); // skipped 사유 세팅
           removeIndices.forEach((index) => remove(index)); // created 행 제거(내림차순 — 인덱스 밀림 방지)
 
           if (skipped.length === 0) {
-            show({ message: `${created.length}건을 납부 완료로 등록했어요.`, variant: 'success' });
+            // RW-9 — alsoIssue면 발급 결과(issued/issueSkipped)를 토스트에 요약
+            const issueSummary = alsoIssue
+              ? ` 교부영수증 ${issued?.length ?? 0}건 발급${
+                  issueSkipped?.length ? `, ${issueSkipped.length}건은 생년월일 없음으로 발급 제외` : ''
+                }.`
+              : '';
+
+            show({ message: `${created.length}건을 납부 완료로 등록했어요.${issueSummary}`, variant: 'success' });
             navigate('/students');
 
             return;
@@ -184,6 +192,8 @@ const useBulkPaymentForm = () => {
     studentOpts,
     period,
     tried,
+    alsoIssue,
+    setAlsoIssue,
     isPending: bulk.isPending,
     addRow,
     duplicateRow,
