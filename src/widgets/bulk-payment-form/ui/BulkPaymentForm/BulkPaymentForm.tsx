@@ -22,6 +22,8 @@ const BulkPaymentForm = () => {
     studentOpts,
     period,
     tried,
+    alsoIssue,
+    setAlsoIssue,
     isPending,
     addRow,
     duplicateRow,
@@ -99,6 +101,8 @@ const BulkPaymentForm = () => {
       <BulkSaveBar
         validCount={validCount}
         grandTotal={grandTotal}
+        alsoIssue={alsoIssue}
+        onAlsoIssueChange={setAlsoIssue}
         isPending={isPending}
         onSubmit={submit}
         onCancel={() => navigate('/students')}

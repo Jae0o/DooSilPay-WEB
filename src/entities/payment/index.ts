@@ -23,5 +23,6 @@ export type {
   BulkPaymentRow,
   BulkCreatePaymentsInput,
   BulkSkippedRow,
+  BulkIssueSkippedRow,
   BulkCreatePaymentsResult,
 } from './model';

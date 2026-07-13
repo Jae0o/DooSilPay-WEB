@@ -2,6 +2,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 
 import {
   type CreatePaymentInput,
+  type Payment,
   type UpdatePaymentInput,
   dueDateFor,
   useCreatePaymentMutation,
@@ -101,9 +102,9 @@ const usePaymentForm = ({ mode, student, payment, onClose, onSuccess }: UsePayme
       show({ message: '저장에 실패했어요. 입력값을 확인해 주세요.', variant: 'error' });
     };
 
-    const onSuccessHandler = () => {
+    const onSuccessHandler = (savedPayment: Payment) => {
       show({ message: mode === 'create' ? '결제가 등록되었어요.' : '결제가 수정되었어요.', variant: 'success' });
-      onSuccess?.();
+      onSuccess?.(savedPayment);
       onClose();
     };
 

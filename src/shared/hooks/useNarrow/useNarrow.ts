@@ -5,20 +5,24 @@ import type { UseNarrowParams } from './useNarrow.type';
 const useNarrow = ({ maxWidth = 560 }: UseNarrowParams = {}) => {
   const ref = useRef<HTMLDivElement>(null);
   const [narrow, setNarrow] = useState(false);
+  const [width, setWidth] = useState(0);
 
   useEffect(() => {
     const el = ref.current;
 
     if (!el) return;
 
-    const ro = new ResizeObserver(([entry]) => setNarrow(entry.contentRect.width < maxWidth));
+    const ro = new ResizeObserver(([entry]) => {
+      setNarrow(entry.contentRect.width < maxWidth);
+      setWidth(entry.contentRect.width);
+    });
 
     ro.observe(el);
 
     return () => ro.disconnect();
   }, [maxWidth]);
 
-  return [ref, narrow] as const;
+  return [ref, narrow, width] as const;
 };
 
 export default useNarrow;

@@ -6,7 +6,7 @@ import { PaymentRow } from '../PaymentRow';
 import type { PaymentHistoryProps } from './PaymentHistory.type';
 
 // suspense 소비 — 로딩/에러는 상위 AsyncBoundary가 수신 (R18)
-const PaymentHistory = ({ studentId, onMarkPaid, onEdit, onDelete }: PaymentHistoryProps) => {
+const PaymentHistory = ({ studentId, onMarkPaid, onEdit, onDelete, onIssue }: PaymentHistoryProps) => {
   const { data } = usePaymentsQuery({ studentId }); // ListPaymentsResult (V2-1)
 
   if (data.items.length === 0)
@@ -28,6 +28,7 @@ const PaymentHistory = ({ studentId, onMarkPaid, onEdit, onDelete }: PaymentHist
           onMarkPaid={() => onMarkPaid(payment)}
           onEdit={() => onEdit(payment)}
           onDelete={() => onDelete(payment)}
+          onIssue={() => onIssue(payment)}
         />
       ))}
     </div>

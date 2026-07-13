@@ -26,7 +26,7 @@ const AppShell = () => {
             animate={{ width: '24.8rem' }}
             exit={{ width: 0 }}
             transition={spring}
-            className="h-screen shrink-0 overflow-hidden sticky top-0"
+            className="dp-noprint h-screen shrink-0 overflow-hidden sticky top-0"
           >
             <motion.div
               initial={{ x: '-100%' }}
@@ -52,7 +52,7 @@ const AppShell = () => {
               animate={{ y: 0 }}
               exit={{ y: '-100%' }}
               transition={spring}
-              className="sticky top-0 z-50"
+              className="dp-noprint sticky top-0 z-50"
             >
               <AppTopBar />
             </motion.div>
@@ -79,7 +79,7 @@ const AppShell = () => {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={spring}
-              className="fixed inset-x-0 bottom-0 z-50"
+              className="dp-noprint fixed inset-x-0 bottom-0 z-50"
             >
               <AppBottomNav />
             </motion.div>

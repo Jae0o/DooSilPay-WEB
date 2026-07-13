@@ -1,7 +1,9 @@
 import { Navigate, createBrowserRouter } from 'react-router';
 
 import { BulkPaymentPage } from '@pages/bulk-payment';
+import { IssueReceiptPage } from '@pages/issue-receipt';
 import { IssuedReceiptsPage } from '@pages/issued-receipts';
+import { ReceiptsExportPage } from '@pages/issued-receipts-export';
 import { LoginPage } from '@pages/login';
 import { OnboardingPage } from '@pages/onboarding';
 import { SettingsPage } from '@pages/settings';
@@ -26,7 +28,8 @@ const router = createBrowserRouter([
           { path: '/students/:id', element: <StudentDetailPage /> },
           { path: '/payments/bulk', element: <BulkPaymentPage /> },
           { path: '/issued-receipts', element: <IssuedReceiptsPage /> },
-          { path: '/issued-receipts/export', element: <IssuedReceiptsPage /> },
+          { path: '/issued-receipts/export', element: <ReceiptsExportPage /> },
+          { path: '/payments/:paymentId/issue', element: <IssueReceiptPage /> },
           { path: '/settings/academy', element: <SettingsPage /> },
         ],
       },

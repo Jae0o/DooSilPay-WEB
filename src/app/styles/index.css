@@ -78,3 +78,119 @@ body {
   font-variant-numeric: tabular-nums;
   font-feature-settings: 'tnum' 1;
 }
+
+/* ---------- 월별 PDF 2x2 페이지 (RW-11 — DooPay.html 원본 이식) ---------- */
+.a4-preview {
+  width: 794px;
+  max-width: 100%;
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  box-shadow: var(--shadow-md);
+  padding: 38px;
+}
+
+.a4-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  align-items: start;
+}
+
+.a4-cell {
+  display: flex;
+  justify-content: center;
+  min-height: 470px;
+}
+
+.a4-preview .a4-cell {
+  zoom: 0.9;
+}
+
+.a4-empty {
+  border: 1.5px dashed var(--color-line-2);
+  border-radius: 8px;
+  color: var(--color-ink-3);
+  align-items: center;
+  font-size: 13px;
+  width: 100%;
+}
+
+.a4-empty span {
+  margin: auto;
+}
+
+.a4-foot {
+  text-align: center;
+  color: var(--color-ink-3);
+  font-size: 12px;
+  margin-top: 14px;
+  font-weight: 600;
+}
+
+.receipt-block {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+/* print-only container (hidden on screen) */
+.dp-print-only {
+  display: none;
+}
+
+@media print {
+  /* margin 0 — 브라우저 머리글(날짜·타이틀)/바닥글(URL)이 그려질 여백 자체를 없앤다.
+     실제 10mm 여백은 .a4-print padding으로 재현 */
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  .dp-noprint,
+  aside,
+  header,
+  nav {
+    display: none !important;
+  }
+
+  /* AppShell main — 인쇄 시 패딩·높이 제약 해제 (dp-printing 없이 Cmd+P 직접 인쇄도 커버) */
+  main {
+    overflow: visible !important;
+    height: auto !important;
+    padding: 0 !important;
+  }
+
+  /* export 페이지 섹션 패딩 제거 — A4가 @page 여백(10mm)에 정확히 맞도록 */
+  main section {
+    padding: 0 !important;
+  }
+
+  .dp-print-only {
+    display: block !important;
+  }
+
+  .a4-print {
+    width: 100%;
+    padding: 10mm; /* @page margin 0 대체 여백 */
+    break-after: page;
+    page-break-after: always;
+  }
+
+  .a4-print:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  .a4-print .a4-cell {
+    zoom: 0.92;
+    min-height: 0;
+  }
+
+  .a4-print .a4-grid {
+    gap: 6mm;
+  }
+}

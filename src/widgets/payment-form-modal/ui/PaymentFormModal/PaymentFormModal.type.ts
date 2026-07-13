@@ -6,7 +6,7 @@ export interface PaymentFormModalProps {
   student: Student; // prefill·subtitle·studentId 공급 (위젯이 양쪽 엔티티 소비 — 수평 참조 아님)
   payment?: Payment; // edit일 때 초기값
   onClose: () => void;
-  onSuccess?: () => void; // 저장 완료 후 추가 동작 (모달 닫기 외)
+  onSuccess?: (payment: Payment) => void; // 저장 완료 후 추가 동작 (모달 닫기 외) — 등록/수정된 Payment 전달 (R7)
 }
 
 export interface PaymentFormValues {

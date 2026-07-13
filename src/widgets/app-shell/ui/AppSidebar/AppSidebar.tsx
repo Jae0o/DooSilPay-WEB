@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router';
+import { NavLink, useLocation } from 'react-router';
 
 import { useGetAcademyQuery } from '@entities/academy';
 import { Avatar, DooPayLogo } from '@shared/ui';
@@ -8,6 +8,7 @@ import { NAV_ITEMS } from '../../model';
 
 const AppSidebar = () => {
   const { data: academy } = useGetAcademyQuery();
+  const { pathname } = useLocation();
 
   return (
     <aside className="flex h-full w-[24.8rem] shrink-0 flex-col border-r border-line bg-surface px-[1.8rem] py-[2.6rem]">
@@ -16,25 +17,29 @@ const AppSidebar = () => {
       </div>
 
       <nav className="mt-[2.2rem] flex flex-1 flex-col gap-[0.4rem]">
-        {NAV_ITEMS.map(({ path, label, Icon }) => (
-          <NavLink
-            key={path}
-            to={path}
-            className={({ isActive }) =>
-              cn(
-                'flex items-center gap-[1.2rem] rounded-md px-[1.4rem] py-[1.2rem] text-[1.5rem] font-semibold transition-colors',
-                isActive ? 'bg-point-weak text-point' : 'text-ink-2 hover:bg-surface-2',
-              )
-            }
-          >
-            {({ isActive }) => (
-              <>
-                <Icon size="2rem" strokeWidth={isActive ? 2.1 : 1.8} />
-                {label}
-              </>
-            )}
-          </NavLink>
-        ))}
+        {NAV_ITEMS.map(({ path, label, Icon, activeMatch }) => {
+          const forcedActive = activeMatch?.(pathname) ?? false;
+
+          return (
+            <NavLink
+              key={path}
+              to={path}
+              className={({ isActive }) =>
+                cn(
+                  'flex items-center gap-[1.2rem] rounded-md px-[1.4rem] py-[1.2rem] text-[1.5rem] font-semibold transition-colors',
+                  isActive || forcedActive ? 'bg-point-weak text-point' : 'text-ink-2 hover:bg-surface-2',
+                )
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  <Icon size="2rem" strokeWidth={isActive || forcedActive ? 2.1 : 1.8} />
+                  {label}
+                </>
+              )}
+            </NavLink>
+          );
+        })}
       </nav>
 
       <footer className="flex items-center gap-[1rem] border-t border-line px-[0.8rem] pt-[1.4rem]">
