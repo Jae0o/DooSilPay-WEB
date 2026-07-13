@@ -37,6 +37,7 @@ const StudentDetail = ({
   onMarkPaid,
   onEditPayment,
   onDeletePayment,
+  onIssuePayment,
 }: StudentDetailProps) => {
   const { toggle, isPending } = useToggleStudentStatus({ student });
 
@@ -117,6 +118,7 @@ const StudentDetail = ({
             onMarkPaid={onMarkPaid}
             onEdit={onEditPayment}
             onDelete={onDeletePayment}
+            onIssue={onIssuePayment}
           />
         </AsyncBoundary>
       </Card>

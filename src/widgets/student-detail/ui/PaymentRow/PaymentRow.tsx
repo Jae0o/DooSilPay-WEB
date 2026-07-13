@@ -1,6 +1,6 @@
 import { METHOD_LABEL, PaymentStatusBadge, paymentTotal, sumOtherFees } from '@entities/payment';
 import { useToggle } from '@shared/hooks';
-import { Button, CheckIcon, ChevronDownIcon, EditIcon, IconButton, TrashIcon } from '@shared/ui';
+import { Badge, Button, CheckIcon, ChevronDownIcon, EditIcon, IconButton, ReceiptIcon, TrashIcon } from '@shared/ui';
 import { formatCurrency, formatPeriod } from '@shared/utils';
 
 import type { PaymentRowProps } from './PaymentRow.type';
@@ -12,7 +12,7 @@ const toMonthDay = (date: string) => {
   return `${Number(month)}.${Number(day)}`;
 };
 
-const PaymentRow = ({ payment, onMarkPaid, onEdit, onDelete }: PaymentRowProps) => {
+const PaymentRow = ({ payment, onMarkPaid, onEdit, onDelete, onIssue }: PaymentRowProps) => {
   const [open, toggle] = useToggle();
 
   // paidDate 있으면 '납부', 없고 dueDate 있으면 '예정', 둘 다 없으면 '—' (dueDate 선택 — P5)
@@ -28,12 +28,14 @@ const PaymentRow = ({ payment, onMarkPaid, onEdit, onDelete }: PaymentRowProps) 
         {/* ① 기간 + 납부/예정일 */}
         <div className="min-w-[9.2rem]">
           <p className="tnum font-bold">{formatPeriod(payment.period)}</p>
+
           <p className="tnum mt-[0.2rem] text-[1.3rem] text-ink-3">{dateLabel}</p>
         </div>
 
         {/* ② 총액 + 구성 */}
         <div className="min-w-[11rem] flex-1">
           <p className="tnum text-[1.6rem] font-bold">{formatCurrency(paymentTotal(payment))}</p>
+
           {payment.otherFees.length > 0 && (
             <p className="tnum mt-[0.1rem] text-[1.3rem] text-ink-3">
               교습비 {formatCurrency(payment.tuitionFee)} · 기타 {formatCurrency(sumOtherFees(payment.otherFees))}
@@ -43,10 +45,18 @@ const PaymentRow = ({ payment, onMarkPaid, onEdit, onDelete }: PaymentRowProps) 
 
         {/* ③ 결제수단 · 상태 · 토글 */}
         <div className="flex items-center gap-[0.8rem]">
+          {payment.issuedReceiptId && (
+            <Badge tone="point" dot size="sm">
+              발급완료
+            </Badge>
+          )}
+
           {payment.method && (
             <span className="whitespace-nowrap text-[1.3rem] text-ink-3">{METHOD_LABEL[payment.method]}</span>
           )}
+
           <PaymentStatusBadge status={payment.status} />
+
           <IconButton
             label="행 액션 펼치기"
             icon={<ChevronDownIcon size="1.8rem" />}
@@ -63,9 +73,20 @@ const PaymentRow = ({ payment, onMarkPaid, onEdit, onDelete }: PaymentRowProps) 
               납부 처리
             </Button>
           )}
+
+          <Button
+            size="sm"
+            variant={payment.issuedReceiptId ? 'neutral' : 'secondary'}
+            icon={<ReceiptIcon size="1.6rem" />}
+            onClick={onIssue}
+          >
+            {payment.issuedReceiptId ? '영수증 보기' : '교부영수증 발급'}
+          </Button>
+
           <Button size="sm" variant="ghost" icon={<EditIcon size="1.6rem" />} onClick={onEdit}>
             수정
           </Button>
+
           <Button
             size="sm"
             variant="ghost"

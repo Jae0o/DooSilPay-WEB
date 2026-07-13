@@ -5,4 +5,5 @@ export interface PaymentHistoryProps {
   onMarkPaid: (payment: Payment) => void;
   onEdit: (payment: Payment) => void;
   onDelete: (payment: Payment) => void;
+  onIssue: (payment: Payment) => void;
 }

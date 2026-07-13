@@ -78,12 +78,14 @@ const meta = {
     onMarkPaid: () => {},
     onEdit: () => {},
     onDelete: () => {},
+    onIssue: () => {},
   },
   argTypes: {
     payment: { control: { disable: true }, description: '렌더할 결제 1건(Payment).' },
     onMarkPaid: { control: { disable: true }, description: '납부 처리 콜백.' },
     onEdit: { control: { disable: true }, description: '수정 콜백.' },
     onDelete: { control: { disable: true }, description: '삭제 콜백.' },
+    onIssue: { control: { disable: true }, description: '교부영수증 발급/보기 콜백.' },
   },
   decorators: [
     (Story) => (

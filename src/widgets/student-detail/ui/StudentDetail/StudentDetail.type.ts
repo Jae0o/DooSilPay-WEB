@@ -10,4 +10,5 @@ export interface StudentDetailProps {
   onMarkPaid: (payment: Payment) => void;
   onEditPayment: (payment: Payment) => void;
   onDeletePayment: (payment: Payment) => void;
+  onIssuePayment: (payment: Payment) => void; // 교부영수증 발급/보기 — 상위(pages)가 라우트 이동 담당 (05-03)
 }
