@@ -1,0 +1,1 @@
+export { ReceiptTemplate } from './ui';
