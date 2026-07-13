@@ -8,6 +8,7 @@ import {
   STATUS_LABEL,
   buildPeriodOptions,
 } from '@entities/payment';
+import { SubjectSelectField } from '@entities/subject';
 import { Button, FormField, IconButton, Modal, PlusIcon, Select, TextField, TextInput, TrashIcon } from '@shared/ui';
 import { formatCurrency } from '@shared/utils';
 
@@ -69,17 +70,14 @@ const PaymentFormModal = ({ mode, student, payment, onClose, onSuccess }: Paymen
           <TextField label="결제 예정일" type="date" error={errors.dueDate?.message} {...register('dueDate')} />
         </div>
 
-        <TextField
+        <SubjectSelectField
           label="교습과목"
           required
-          hint="교부영수증에 표기될 과정명이에요."
-          placeholder="예) 중등 수학"
+          placeholder="과목을 선택하세요"
+          emptyHint="등록된 과목이 없어요. 설정 > 교습과목에서 먼저 등록해 주세요."
+          current={payment?.subjectName || student.subjectName || undefined}
           error={errors.subjectName?.message}
-          {...register('subjectName', {
-            required: '교습과목을 입력해 주세요.',
-            validate: (value) => value.trim().length > 0 || '교습과목을 입력해 주세요.',
-            maxLength: { value: 30, message: '30자 이내로 입력해 주세요.' },
-          })}
+          registration={register('subjectName', { required: '교습과목을 선택해 주세요.' })}
         />
 
         <TextField

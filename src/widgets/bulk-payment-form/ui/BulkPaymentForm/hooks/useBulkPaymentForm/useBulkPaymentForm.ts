@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 
 import { type BulkPaymentRow, type BulkSkippedRow, dueDateFor, useBulkCreatePaymentsMutation } from '@entities/payment';
 import { useStudentsQuery } from '@entities/student';
+import { useSubjectsQuery } from '@entities/subject';
 import { useToast } from '@shared/hooks';
 import { zeroPad } from '@shared/utils';
 
@@ -68,6 +69,7 @@ const useBulkPaymentForm = () => {
   const bulk = useBulkCreatePaymentsMutation();
   const { data } = useStudentsQuery({ status: 'active', limit: 100 }); // 위젯 내부 조회(suspense) — 페이지 경계가 수신
   const students = data.items;
+  useSubjectsQuery(); // V2-2: 과목 캐시 워밍 — 행별 SubjectSelectField가 페이지 경계에서 함께 조회(행 suspend 방지)
 
   const [tried, setTried] = useState(false); // 제출 시도 후 오류 행 하이라이트 활성
 

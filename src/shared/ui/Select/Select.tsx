@@ -20,7 +20,7 @@ const Select = ({ options, placeholder, invalid = false, disabled, className, re
       ref={ref}
       disabled={disabled}
       aria-invalid={invalid || undefined}
-      className="h-[4.8rem] w-full appearance-none border-0 bg-transparent pr-[4rem] pl-[1.6rem] text-[1.6rem] text-ink outline-none disabled:cursor-not-allowed"
+      className="h-[4.8rem] w-full appearance-none border-0 bg-transparent pr-[4rem] pl-[1.6rem] text-[1.6rem] text-ink outline-none [&:has(option[value='']:checked)]:text-ink-3 disabled:cursor-not-allowed"
       {...rest}
     >
       {placeholder && <option value="">{placeholder}</option>}
