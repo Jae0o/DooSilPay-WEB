@@ -1,0 +1,1 @@
+export { IssueReceiptPage } from './ui';
