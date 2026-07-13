@@ -1,3 +1,4 @@
+import { SubjectSelectField } from '@entities/subject';
 import { Button, FormField, Modal, Select, TextField } from '@shared/ui';
 
 import type { StudentFormModalProps } from './StudentFormModal.type';
@@ -53,10 +54,12 @@ const StudentFormModal = ({ open, onClose, mode, student }: StudentFormModalProp
         </div>
 
         <div className="grid grid-cols-1 gap-[1.4rem] sm:grid-cols-2">
-          <TextField
+          <SubjectSelectField
             label="과목"
+            placeholder="과목 선택 안 함"
+            current={student?.subjectName || undefined}
             error={errors.subjectName?.message}
-            {...register('subjectName', { maxLength: { value: 30, message: '30자 이내로 입력해 주세요.' } })}
+            registration={register('subjectName')}
           />
 
           <TextField

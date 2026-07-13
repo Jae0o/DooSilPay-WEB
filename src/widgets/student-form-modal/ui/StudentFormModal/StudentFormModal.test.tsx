@@ -1,9 +1,20 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import type { ReactElement } from 'react';
 
 import type { Student } from '@entities/student';
+import { SUBJECT_KEY } from '@entities/subject';
 
 import StudentFormModal from './StudentFormModal';
+
+// SubjectSelectField(suspense)용 — 과목 캐시를 시드해 즉시 해소(네트워크 없음)
+const renderModal = (ui: ReactElement) => {
+  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  queryClient.setQueryData(SUBJECT_KEY.list(), ['피아노']);
+
+  return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>);
+};
 
 const { createSpy, updateSpy, statusSpy } = vi.hoisted(() => ({
   createSpy: vi.fn(),
@@ -45,7 +56,7 @@ const submitForm = async () => {
 
 describe('StudentFormModal', () => {
   it('빈 값으로 제출하면 성명·교습비 필수 에러를 노출하고 저장 요청을 보내지 않는다', async () => {
-    render(<StudentFormModal open mode="create" onClose={vi.fn()} />);
+    renderModal(<StudentFormModal open mode="create" onClose={vi.fn()} />);
 
     await userEvent.setup().type(screen.getByLabelText(/교습비/), '{backspace}');
     await submitForm();
@@ -57,7 +68,7 @@ describe('StudentFormModal', () => {
 
   it('보호자명만 입력하면 보호자 연락처 필수 에러를 노출한다', async () => {
     const user = userEvent.setup();
-    render(<StudentFormModal open mode="create" onClose={vi.fn()} />);
+    renderModal(<StudentFormModal open mode="create" onClose={vi.fn()} />);
 
     await user.type(screen.getByPlaceholderText('홍길동'), '홍길동');
     await user.type(screen.getByLabelText(/교습비/), '100000');
@@ -70,7 +81,7 @@ describe('StudentFormModal', () => {
 
   it('성명·교습비를 입력해 제출하면 create mutation을 호출한다', async () => {
     const user = userEvent.setup();
-    render(<StudentFormModal open mode="create" onClose={vi.fn()} />);
+    renderModal(<StudentFormModal open mode="create" onClose={vi.fn()} />);
 
     await user.type(screen.getByPlaceholderText('홍길동'), '홍길동');
     await user.type(screen.getByLabelText(/교습비/), '100000');
@@ -81,7 +92,7 @@ describe('StudentFormModal', () => {
   });
 
   it('edit 모드에서 제출하면 update mutation을 id·input과 함께 호출한다', async () => {
-    render(<StudentFormModal open mode="edit" student={student} onClose={vi.fn()} />);
+    renderModal(<StudentFormModal open mode="edit" student={student} onClose={vi.fn()} />);
 
     await submitForm();
 

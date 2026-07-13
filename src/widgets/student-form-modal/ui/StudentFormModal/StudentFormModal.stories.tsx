@@ -3,11 +3,14 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import type { Student } from '@entities/student';
+import { SUBJECT_KEY } from '@entities/subject';
 import { Button } from '@shared/ui';
 
 import StudentFormModal from './StudentFormModal';
 
 const queryClient = new QueryClient();
+// 과목 필드(SubjectSelectField, suspense) — 캐시 사전 시딩으로 즉시 해소(V2-4)
+queryClient.setQueryData(SUBJECT_KEY.list(), ['수학', '영어', '피아노']);
 
 const SAMPLE_STUDENT: Student = {
   id: 'student-1',
