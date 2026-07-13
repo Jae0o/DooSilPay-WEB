@@ -6,5 +6,5 @@ export interface UsePaymentFormParams {
   student: Student;
   payment?: Payment; // mode==='edit' 시 복원값
   onClose: () => void;
-  onSuccess?: () => void;
+  onSuccess?: (payment: Payment) => void;
 }

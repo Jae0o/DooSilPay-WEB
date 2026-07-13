@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import { useStudentQuery } from '@entities/student';
 import { DeletePaymentDialog } from '@features/delete-payment';
 import { DeleteStudentDialog } from '@features/delete-student';
+import { IssuePromptDialog } from '@features/issue-receipt';
 import { MarkPaidDialog } from '@features/mark-paid';
 import { PaymentFormModal } from '@widgets/payment-form-modal';
 import { StudentDetail } from '@widgets/student-detail';
@@ -18,6 +19,7 @@ const StudentDetailContent = ({ id }: { id: string }) => {
 
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [issuePromptPaymentId, setIssuePromptPaymentId] = useState<string | null>(null); // R7 — 단일 등록 성공 직후 발급 유도
   const { modal, openCreate, openEdit, openDelete, openMarkPaid, close } = usePaymentModals();
 
   return (
@@ -30,16 +32,28 @@ const StudentDetailContent = ({ id }: { id: string }) => {
         onEditPayment={openEdit}
         onDeletePayment={openDelete}
         onMarkPaid={openMarkPaid}
+        onIssuePayment={(payment) => navigate(`/payments/${payment.id}/issue`)}
       />
 
       <StudentFormModal open={editOpen} mode="edit" student={student} onClose={() => setEditOpen(false)} />
 
-      {modal?.type === 'create' && <PaymentFormModal mode="create" student={student} onClose={close} />}
+      {modal?.type === 'create' && (
+        <PaymentFormModal
+          mode="create"
+          student={student}
+          onClose={close}
+          onSuccess={(payment) => setIssuePromptPaymentId(payment.id)}
+        />
+      )}
       {modal?.type === 'edit' && (
         <PaymentFormModal mode="edit" student={student} payment={modal.payment} onClose={close} />
       )}
       {modal?.type === 'delete' && <DeletePaymentDialog payment={modal.payment} onClose={close} />}
       {modal?.type === 'markPaid' && <MarkPaidDialog payment={modal.payment} onClose={close} />}
+
+      {issuePromptPaymentId && (
+        <IssuePromptDialog paymentId={issuePromptPaymentId} onClose={() => setIssuePromptPaymentId(null)} />
+      )}
 
       <DeleteStudentDialog
         open={deleteOpen}
