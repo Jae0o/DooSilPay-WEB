@@ -67,7 +67,13 @@ const PaymentFormModal = ({ mode, student, payment, onClose, onSuccess }: Paymen
             />
           </FormField>
 
-          <TextField label="결제 예정일" type="date" error={errors.dueDate?.message} {...register('dueDate')} />
+          <TextField
+            label="결제 예정일"
+            type="date"
+            hint="비워두면 예정일 없이 등록돼요."
+            error={errors.dueDate?.message}
+            {...register('dueDate')}
+          />
         </div>
 
         <SubjectSelectField
@@ -174,7 +180,10 @@ const PaymentFormModal = ({ mode, student, payment, onClose, onSuccess }: Paymen
             <Select options={METHOD_OPTIONS} placeholder="선택 안 함" {...register('method')} />
           </FormField>
 
-          <FormField label="상태">
+          <FormField
+            label="상태"
+            hint={mode === 'create' ? '‘납부완료’로 등록하면 납부일이 오늘로 기록돼요.' : undefined}
+          >
             <Select options={STATUS_OPTIONS} {...register('status')} />
           </FormField>
         </div>
