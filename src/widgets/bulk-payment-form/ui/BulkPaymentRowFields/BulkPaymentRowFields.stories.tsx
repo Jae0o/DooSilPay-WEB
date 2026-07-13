@@ -1,9 +1,16 @@
 import type { Decorator, Meta, StoryObj } from '@storybook/react-vite';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
+
+import { SUBJECT_KEY } from '@entities/subject';
 
 import type { BulkPaymentFormValues, BulkPaymentRowValues } from '../BulkPaymentForm/hooks';
 
 import BulkPaymentRowFields from './BulkPaymentRowFields';
+
+const queryClient = new QueryClient();
+// 교습과목 셀(SubjectSelectField, suspense) — 캐시 사전 시딩으로 즉시 해소(V2-4)
+queryClient.setQueryData(SUBJECT_KEY.list(), ['중등 수학', '고등 영어']);
 
 const STUDENT_OPTS = [
   { value: 'student-1', label: '김두실 · 중등 수학' },
@@ -82,6 +89,13 @@ const meta = {
     tried: { control: 'boolean', description: '제출 후 불완전 행 하이라이트.' },
     seed: { control: { disable: true }, description: '행 초기값(BulkPaymentRowValues).' },
   },
+  decorators: [
+    (Story) => (
+      <QueryClientProvider client={queryClient}>
+        <Story />
+      </QueryClientProvider>
+    ),
+  ],
 } satisfies Meta<typeof RowHarness>;
 
 export default meta;

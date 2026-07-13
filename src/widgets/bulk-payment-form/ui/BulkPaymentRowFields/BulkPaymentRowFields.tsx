@@ -1,6 +1,7 @@
 import { useWatch } from 'react-hook-form';
 
 import { METHOD_LABEL, type PaymentMethod } from '@entities/payment';
+import { SubjectSelectField } from '@entities/subject';
 import { AlertIcon, Card, CopyIcon, FormField, IconButton, Select, TextInput, TrashIcon } from '@shared/ui';
 import { cn, formatCurrency } from '@shared/utils';
 
@@ -69,9 +70,14 @@ const BulkPaymentRowFields = ({
         <TextInput type="date" {...register(`rows.${index}.dueDate`)} />
       </FormField>
 
-      <FormField label="교습과목" required>
-        <TextInput placeholder="예) 중등 수학" {...register(`rows.${index}.subjectName`)} />
-      </FormField>
+      <SubjectSelectField
+        label="교습과목"
+        required
+        placeholder="선택"
+        emptyHint="설정 > 교습과목에서 먼저 등록해 주세요."
+        current={row.subjectName}
+        registration={register(`rows.${index}.subjectName`)}
+      />
 
       <FormField label="교습비" required>
         <TextInput type="number" suffix="원" {...register(`rows.${index}.tuitionFee`)} />
