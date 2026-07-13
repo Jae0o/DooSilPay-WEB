@@ -33,6 +33,7 @@ const DeletePaymentDialog = ({ payment, onClose }: DeletePaymentDialogProps) => 
         <p className="text-[1.5rem] leading-[1.65] text-ink-2">
           <b className="text-ink">{formatPeriod(payment.period)}</b> 결제({formatCurrency(paymentTotal(payment))})를
           삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.
+          {payment.issuedReceiptId && ' 발급된 교부영수증도 함께 삭제되며 같은 달 일련번호가 재정렬됩니다.'}
         </p>
       </div>
     </Modal>
