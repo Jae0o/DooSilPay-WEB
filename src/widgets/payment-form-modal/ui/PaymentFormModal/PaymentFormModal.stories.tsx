@@ -4,11 +4,14 @@ import { useState } from 'react';
 
 import type { Payment } from '@entities/payment';
 import type { Student } from '@entities/student';
+import { SUBJECT_KEY } from '@entities/subject';
 import { Button } from '@shared/ui';
 
 import PaymentFormModal from './PaymentFormModal';
 
 const queryClient = new QueryClient();
+// 교습과목 필드(SubjectSelectField, suspense) — 캐시 사전 시딩으로 즉시 해소(V2-4)
+queryClient.setQueryData(SUBJECT_KEY.list(), ['중등 수학', '고등 영어', '피아노']);
 
 const SAMPLE_STUDENT: Student = {
   id: 'student-1',
