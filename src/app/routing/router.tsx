@@ -7,6 +7,7 @@ import { ReceiptsExportPage } from '@pages/issued-receipts-export';
 import { LoginPage } from '@pages/login';
 import { OnboardingPage } from '@pages/onboarding';
 import { SettingsPage } from '@pages/settings';
+import { SignaturesPage } from '@pages/settings-signatures';
 import { StudentDetailPage } from '@pages/student-detail';
 import { StudentsPage } from '@pages/students';
 import { AppShell } from '@widgets/app-shell';
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
           { path: '/issued-receipts/export', element: <ReceiptsExportPage /> },
           { path: '/payments/:paymentId/issue', element: <IssueReceiptPage /> },
           { path: '/settings/academy', element: <SettingsPage /> },
+          { path: '/settings/signatures', element: <SignaturesPage /> },
         ],
       },
     ],
