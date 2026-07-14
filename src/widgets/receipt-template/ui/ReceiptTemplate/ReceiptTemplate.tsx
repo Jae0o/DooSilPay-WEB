@@ -210,12 +210,25 @@ const ReceiptTemplate = ({ data, scale = 1, id }: ReceiptTemplateProps) => {
             또는 개인과외 교습자
           </div>
           {showSignature ? (
-            <img
-              src={vm.signatureUrl ?? undefined}
-              alt="서명"
-              onError={() => setErroredSignatureUrl(vm.signatureUrl)}
-              style={{ width: 48, height: 48, objectFit: 'contain', flexShrink: 0 }}
-            />
+            // "(인)" 위에 서명 이미지를 겹쳐 렌더 — 배경 투명 서명이 도장처럼 (인) 위에 찍힌 형태.
+            <div
+              style={{
+                position: 'relative',
+                width: 48,
+                height: 48,
+                flexShrink: 0,
+                display: 'grid',
+                placeItems: 'center',
+              }}
+            >
+              <span style={{ color: '#aeb6bf', fontSize: 12, whiteSpace: 'nowrap' }}>(인)</span>
+              <img
+                src={vm.signatureUrl ?? undefined}
+                alt="서명"
+                onError={() => setErroredSignatureUrl(vm.signatureUrl)}
+                style={{ position: 'absolute', inset: 0, width: 48, height: 48, objectFit: 'contain' }}
+              />
+            </div>
           ) : (
             <span style={{ color: '#aeb6bf', fontSize: 12, whiteSpace: 'nowrap' }}>(서명 또는 인)</span>
           )}

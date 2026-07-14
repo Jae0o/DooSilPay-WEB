@@ -45,7 +45,8 @@ const withOverrides = (overrides: Partial<IssuedReceipt>): IssuedReceipt => ({ .
  *
  * - 순수 표시 위젯 — 훅·API 의존 없이 `IssuedReceipt` 타입만 소비한다.
  * - 기타경비는 **3열 고정**(항목명 행 + 금액 행) — 데이터가 3 미만이면 빈 칸으로 남는다.
- * - 서명(`academy.signatureUrl`) 없으면 "(서명 또는 인)" placeholder 텍스트.
+ * - 서명(`academy.signatureUrl`) 없으면 "(서명 또는 인)" placeholder 텍스트. 있으면 "(인)" 위에 서명 이미지를 겹쳐
+ *   렌더(배경 투명 서명이 도장처럼 (인) 위에 찍힌 형태).
  * - 축소는 `scale` prop(`transform: scale`) — reflow 없음. 내부 치수·색은 서식 고정 px·hex(RW-12 예외).
  */
 const meta = {
@@ -78,7 +79,7 @@ export const OneOtherFee: Story = {
   args: { data: withOverrides({ otherFees: [{ label: '교재비', amount: 30000 }] }) },
 };
 
-/** 서명 이미지 있음 — "(서명 또는 인)" placeholder 대신 서명 렌더. */
+/** 서명 이미지 있음 — "(인)" 위에 서명 이미지를 겹쳐 렌더(도장 형태). */
 export const WithSignature: Story = {
   args: { data: withOverrides({ academy: { ...base.academy, signatureUrl: SIGNATURE_DATA_URI } }) },
 };
