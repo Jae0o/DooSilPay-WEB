@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { CSSProperties } from 'react';
 
 import type { ReceiptTemplateProps } from './ReceiptTemplate.type';
@@ -45,6 +46,10 @@ const inlineValue: CSSProperties = {
 
 const ReceiptTemplate = ({ data, scale = 1, id }: ReceiptTemplateProps) => {
   const vm = receiptVM(data);
+  // SG13: 스냅샷 URL은 서명 교체/삭제 시 깨질 수 있음 → 로드 실패한 URL만 기록해 placeholder로 폴백.
+  // 에러난 URL 자체를 비교하므로 vm.signatureUrl 변경 시 자동 리셋(리마운트/effect 불필요).
+  const [erroredSignatureUrl, setErroredSignatureUrl] = useState<string | null>(null);
+  const showSignature = Boolean(vm.signatureUrl) && vm.signatureUrl !== erroredSignatureUrl;
 
   return (
     <div
@@ -204,10 +209,11 @@ const ReceiptTemplate = ({ data, scale = 1, id }: ReceiptTemplateProps) => {
             <br />
             또는 개인과외 교습자
           </div>
-          {vm.signatureUrl ? (
+          {showSignature ? (
             <img
-              src={vm.signatureUrl}
+              src={vm.signatureUrl ?? undefined}
               alt="서명"
+              onError={() => setErroredSignatureUrl(vm.signatureUrl)}
               style={{ width: 48, height: 48, objectFit: 'contain', flexShrink: 0 }}
             />
           ) : (
