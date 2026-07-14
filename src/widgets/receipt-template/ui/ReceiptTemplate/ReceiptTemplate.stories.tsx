@@ -83,6 +83,11 @@ export const WithSignature: Story = {
   args: { data: withOverrides({ academy: { ...base.academy, signatureUrl: SIGNATURE_DATA_URI } }) },
 };
 
+/** 깨진 서명 URL(교체/삭제로 스냅샷 URL 무효화, SG13) — onError 폴백으로 "(서명 또는 인)" 표시. */
+export const BrokenSignature: Story = {
+  args: { data: withOverrides({ academy: { ...base.academy, signatureUrl: 'https://invalid.example/deleted.png' } }) },
+};
+
 /** 0원 발급 허용(E3) — 교습비 0, 기타경비 빈 칸. */
 export const ZeroAmount: Story = {
   args: { data: withOverrides({ tuitionFee: 0, otherFees: [] }) },
