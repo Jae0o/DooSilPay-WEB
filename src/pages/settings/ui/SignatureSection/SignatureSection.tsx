@@ -16,6 +16,9 @@ const SignatureSection = ({ signatureUrl, cacheKey }: SignatureSectionProps) => 
 
   const statusText = signatureUrl ? '서명 이미지가 등록되어 있어요' : '등록된 서명 이미지가 없어요';
 
+  // downloadURL은 이미 ?alt=media&token=... 쿼리를 가짐 → 캐시버스팅은 &로 이어붙여야 token이 오염되지 않는다
+  const previewSrc = `${signatureUrl}${signatureUrl?.includes('?') ? '&' : '?'}v=${cacheKey}`;
+
   return (
     <Card pad="2.8rem" className="mb-[1.6rem]">
       <SettingsSectionTitle
@@ -32,11 +35,7 @@ const SignatureSection = ({ signatureUrl, cacheKey }: SignatureSectionProps) => 
           </div>
           <div className={`${PREVIEW_CLASS} h-[13.2rem] w-full`}>
             {signatureUrl ? (
-              <img
-                src={`${signatureUrl}?v=${cacheKey}`}
-                alt="서명"
-                className="h-full w-full object-contain p-[0.8rem]"
-              />
+              <img src={previewSrc} alt="서명" className="h-full w-full object-contain p-[0.8rem]" />
             ) : (
               <ImageIcon size="3.2rem" />
             )}
@@ -54,11 +53,7 @@ const SignatureSection = ({ signatureUrl, cacheKey }: SignatureSectionProps) => 
         <div className="mt-[1.8rem] flex items-center gap-[1.8rem]">
           <div className={`${PREVIEW_CLASS} h-[9.2rem] w-[9.2rem] shrink-0`}>
             {signatureUrl ? (
-              <img
-                src={`${signatureUrl}?v=${cacheKey}`}
-                alt="서명"
-                className="h-full w-full object-contain p-[0.8rem]"
-              />
+              <img src={previewSrc} alt="서명" className="h-full w-full object-contain p-[0.8rem]" />
             ) : (
               <ImageIcon size="2.8rem" />
             )}

@@ -13,8 +13,11 @@ const SignatureManageCard = ({ signatureUrl, cacheKey, uploadAction, deleteActio
   const statusText = registered ? '서명 이미지가 등록되어 있어요' : '등록된 서명 이미지가 없어요';
   const uploadLabel = registered ? '다시 업로드' : '업로드';
 
+  // downloadURL은 이미 ?alt=media&token=... 쿼리를 가짐 → 캐시버스팅은 &로 이어붙여야 token이 오염되지 않는다
+  const previewSrc = `${signatureUrl}${signatureUrl?.includes('?') ? '&' : '?'}v=${cacheKey}`;
+
   const preview = registered ? (
-    <img src={`${signatureUrl}?v=${cacheKey}`} alt="서명" className="h-full w-full object-contain p-[0.8rem]" />
+    <img src={previewSrc} alt="서명" className="h-full w-full object-contain p-[0.8rem]" />
   ) : (
     <ImageIcon size={isMobile ? '3.2rem' : '2.8rem'} />
   );
