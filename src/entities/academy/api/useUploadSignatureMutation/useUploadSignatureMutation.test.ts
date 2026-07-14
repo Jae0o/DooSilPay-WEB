@@ -1,10 +1,14 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { renderHook, waitFor } from '@testing-library/react';
 import axios from 'axios';
+import { type ReactNode, createElement } from 'react';
 
 import { httpClient } from '@shared/api';
 
 import type { AcademyProfile } from '../../model';
+import { ACADEMY_KEY } from '../academy.keys';
 
-import { uploadSignature } from './useUploadSignatureMutation';
+import useUploadSignatureMutation, { uploadSignature } from './useUploadSignatureMutation';
 
 vi.mock('axios', () => ({
   default: { put: vi.fn() },
@@ -23,6 +27,13 @@ const academy: AcademyProfile = {
   ownerName: '김원장',
   signatureUrl: 'https://storage/owners/owner-1/signature?alt=media',
   updatedAt: '2026-01-01T00:00:00.000Z',
+};
+
+const createWrapper = (queryClient: QueryClient) => {
+  const Wrapper = ({ children }: { children: ReactNode }) =>
+    createElement(QueryClientProvider, { client: queryClient }, children);
+
+  return Wrapper;
 };
 
 describe('uploadSignature', () => {
@@ -72,5 +83,44 @@ describe('uploadSignature', () => {
     expect(mockPut).toHaveBeenCalledWith('https://upload-url', file, {
       headers: { 'Content-Type': 'image/jpeg' },
     });
+  });
+
+  it('sign-upload 실패 시 PUT·confirm를 호출하지 않는다', async () => {
+    const file = new File(['x'], 'sign.png', { type: 'image/png' });
+    mockPost.mockRejectedValueOnce(new Error('sign fail'));
+
+    await expect(uploadSignature(file)).rejects.toThrow('sign fail');
+    expect(mockPut).not.toHaveBeenCalled();
+    expect(mockPost).toHaveBeenCalledTimes(1); // sign-upload만
+  });
+
+  it('Storage PUT 실패 시 confirm를 호출하지 않는다', async () => {
+    const file = new File(['x'], 'sign.png', { type: 'image/png' });
+    mockPost.mockResolvedValueOnce({ data: { ok: true, data: { uploadUrl: 'https://u', expiresAt: 'iso' } } });
+    mockPut.mockRejectedValueOnce(new Error('put fail'));
+
+    await expect(uploadSignature(file)).rejects.toThrow('put fail');
+    expect(mockPost).toHaveBeenCalledTimes(1); // sign-upload만 — confirm 미호출
+  });
+});
+
+describe('useUploadSignatureMutation', () => {
+  beforeEach(() => {
+    mockPut.mockReset();
+    mockPost.mockReset();
+  });
+
+  it('성공 시 confirm 결과로 ACADEMY_KEY.me() 캐시를 직갱신한다', async () => {
+    mockPost.mockResolvedValueOnce({ data: { ok: true, data: { uploadUrl: 'https://u', expiresAt: 'iso' } } });
+    mockPost.mockResolvedValueOnce({ data: { ok: true, data: academy } });
+    mockPut.mockResolvedValue({});
+
+    const queryClient = new QueryClient();
+    const { result } = renderHook(() => useUploadSignatureMutation(), { wrapper: createWrapper(queryClient) });
+
+    result.current.mutate(new File(['x'], 'sign.png', { type: 'image/png' }));
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(queryClient.getQueryData(ACADEMY_KEY.me())).toEqual(academy);
   });
 });
